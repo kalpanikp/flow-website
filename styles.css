@@ -2957,26 +2957,31 @@ a {
 }
 
 .flow-voice-agent {
-  position: fixed;
+  position: fixed !important;
   right: clamp(0.85rem, 2vw, 1.25rem);
   bottom: clamp(0.85rem, 2vw, 1.25rem);
-  z-index: 9998;
+  z-index: 2147483647 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  overflow: visible !important;
+  transform: none !important;
+  filter: none !important;
+  contain: none !important;
+  isolation: isolate;
   max-width: min(420px, calc(100vw - 1.5rem));
-  filter: drop-shadow(0 18px 42px rgba(15, 27, 41, 0.18));
+  min-width: 84px;
+  min-height: 84px;
 }
 
 .flow-voice-agent::before {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(200, 157, 75, 0.18), transparent 66%);
-  pointer-events: none;
-  z-index: -1;
+  content: none;
 }
 
-.flow-voice-agent elevenlabs-convai {
-  display: block;
+.flow-voice-agent,
+elevenlabs-convai.flow-voice-agent {
+  display: block !important;
   min-width: 84px;
   min-height: 84px;
 }

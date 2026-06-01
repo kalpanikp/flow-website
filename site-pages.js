@@ -131,12 +131,10 @@
   function setupElevenLabsConcierge() {
     if (byId("flow-voice-agent")) return;
 
-    const mount = document.createElement("div");
-    mount.className = "flow-voice-agent";
-    mount.id = "flow-voice-agent";
-    mount.setAttribute("aria-label", "Flow Concierge voice agent");
-
     const widget = document.createElement("elevenlabs-convai");
+    widget.className = "flow-voice-agent";
+    widget.id = "flow-voice-agent";
+    widget.setAttribute("aria-label", "Flow Concierge voice agent");
     widget.setAttribute("agent-id", "agent_0401kt1jdzr0epdryce575wve93t");
     widget.setAttribute("action-text", "Flow Concierge");
     widget.setAttribute("expand-text", "Flow Concierge");
@@ -148,8 +146,7 @@
     widget.setAttribute("avatar-orb-color-1", "#C89D4B");
     widget.setAttribute("avatar-orb-color-2", "#F6F4F0");
 
-    mount.appendChild(widget);
-    document.body.appendChild(mount);
+    document.body.appendChild(widget);
 
     const loadWidgetScript = () => {
       if (document.querySelector('script[data-flow-elevenlabs-widget="true"]')) return;

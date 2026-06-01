@@ -411,18 +411,20 @@ function initEssenceAnimations() {
   if (prefersReducedMotion) return;
 
   // A. Staggered reveal of ingredient cards
-  gsap.from(".ingredient-card", {
-    scrollTrigger: {
-      trigger: ".ingredients-grid",
-      start: "top 80%",
-      toggleActions: "play none none none"
-    },
-    opacity: 0,
-    y: 60,
-    duration: 1.0,
-    stagger: 0.2,
-    ease: "power3.out"
-  });
+  if (document.querySelector(".ingredients-grid") && document.querySelector(".ingredient-card")) {
+    gsap.from(".ingredient-card", {
+      scrollTrigger: {
+        trigger: ".ingredients-grid",
+        start: "top 80%",
+        toggleActions: "play none none none"
+      },
+      opacity: 0,
+      y: 60,
+      duration: 1.0,
+      stagger: 0.2,
+      ease: "power3.out"
+    });
+  }
 
   // B. Magnetic Hover Effect on the minimal plus "+" buttons
   const magneticButtons = document.querySelectorAll(".btn-magnetic-add");
@@ -1963,25 +1965,27 @@ function initWebGLBackground() {
   });
 
   // H. Staggered ScrollTrigger for Beer Showcase visibility & depth control
-  ScrollTrigger.create({
-    trigger: "#brews",
-    start: "top 85%",
-    end: "bottom 15%",
-    onEnter: () => {
-      gsap.to(".webgl-bg-container", { opacity: 0.95, duration: 1.2, ease: "power2.out" });
-      container.style.zIndex = "-2";
-    },
-    onLeave: () => {
-      gsap.to(".webgl-bg-container", { opacity: 0, duration: 1.0, ease: "power2.inOut" });
-    },
-    onEnterBack: () => {
-      gsap.to(".webgl-bg-container", { opacity: 0.95, duration: 1.2, ease: "power2.out" });
-      container.style.zIndex = "-2";
-    },
-    onLeaveBack: () => {
-      gsap.to(".webgl-bg-container", { opacity: 0, duration: 1.0, ease: "power2.inOut" });
-    }
-  });
+  if (document.querySelector("#brews")) {
+    ScrollTrigger.create({
+      trigger: "#brews",
+      start: "top 85%",
+      end: "bottom 15%",
+      onEnter: () => {
+        gsap.to(".webgl-bg-container", { opacity: 0.95, duration: 1.2, ease: "power2.out" });
+        container.style.zIndex = "-2";
+      },
+      onLeave: () => {
+        gsap.to(".webgl-bg-container", { opacity: 0, duration: 1.0, ease: "power2.inOut" });
+      },
+      onEnterBack: () => {
+        gsap.to(".webgl-bg-container", { opacity: 0.95, duration: 1.2, ease: "power2.out" });
+        container.style.zIndex = "-2";
+      },
+      onLeaveBack: () => {
+        gsap.to(".webgl-bg-container", { opacity: 0, duration: 1.0, ease: "power2.inOut" });
+      }
+    });
+  }
 
   // I. Render Ticker
   let lastTime = 0;
