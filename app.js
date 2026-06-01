@@ -509,11 +509,39 @@ function initSignaturePours() {
   };
 
   let activeIndex = 0;
-  let swapTimer = null;
   let hasMovedSignature = false;
   let suppressOpenUntil = 0;
   let signatureScrollTrigger = null;
   let mobileLastScrollIndex = -1;
+  let activeBottleLayer = bottleImg;
+  const bottleLayers = new Map();
+
+  function getSignatureImageSrc(key) {
+    const data = BEER_DATA[key];
+    if (!data || !data.img) return "";
+    const width = window.innerWidth <= 768 ? 480 : 800;
+    return data.img.replace("Public/Beer Image/", "Public/Beer Image/homepage/").replace(".webp", `-${width}.webp`);
+  }
+
+  function setupSignatureImageLayers() {
+    pourKeys.forEach((key, index) => {
+      const image = index === 0 ? bottleImg : document.createElement("img");
+      image.src = getSignatureImageSrc(key);
+      image.alt = "";
+      image.decoding = "async";
+      image.loading = "eager";
+      image.classList.add("signature-bottle-img", "signature-beer-layer");
+      image.classList.toggle("active", index === 0);
+      image.dataset.pourImage = key;
+
+      if (index > 0) {
+        image.setAttribute("aria-hidden", "true");
+        productVisual.insertBefore(image, bottleShadow || null);
+      }
+
+      bottleLayers.set(key, image);
+    });
+  }
 
   function setActivePour(index, instant = false, withFeedback = true) {
     const clampedIndex = ((index % pourKeys.length) + pourKeys.length) % pourKeys.length;
@@ -523,6 +551,8 @@ function initSignaturePours() {
     const key = pourKeys[activeIndex];
     const data = BEER_DATA[key];
     const theme = pourTheme[key] || pourTheme.belgian;
+    const nextLayer = bottleLayers.get(key) || bottleImg;
+    activeBottleLayer = nextLayer;
 
     section.style.setProperty("--signature-accent", theme.accent);
     if (isDesktopShowcase) {
@@ -540,25 +570,23 @@ function initSignaturePours() {
       dot.classList.toggle("active", dot.getAttribute("data-pour-dot") === key);
     });
 
+    bottleLayers.forEach((image, imageKey) => {
+      image.classList.toggle("active", imageKey === key);
+    });
+
     if (withFeedback && !instant) {
       playFlowTickFeedback();
     }
 
-    if (!data || bottleImg.getAttribute("src") === data.img) return;
-
-    window.clearTimeout(swapTimer);
-
     if (isMobileShowcase && hasMotionEngine) {
-      gsap.killTweensOf(bottleImg);
-      bottleImg.src = data.img;
-      bottleImg.alt = "";
+      gsap.killTweensOf(nextLayer);
 
       if (instant) {
-        gsap.set(bottleImg, { opacity: 1, y: 8, scale: 0.92, rotate: -1 });
+        gsap.set(nextLayer, { opacity: 1, y: 8, scale: 0.92, rotate: -1 });
         return;
       }
 
-      gsap.fromTo(bottleImg,
+      gsap.fromTo(nextLayer,
         { opacity: 0, y: 56, scale: 0.84, rotate: 4 },
         {
           opacity: 1,
@@ -580,13 +608,6 @@ function initSignaturePours() {
 
       return;
     }
-
-    bottleImg.classList.add("is-swapping");
-    swapTimer = window.setTimeout(() => {
-      bottleImg.src = data.img;
-      bottleImg.alt = "";
-      bottleImg.classList.remove("is-swapping");
-    }, instant ? 0 : 90);
   }
 
   function openActivePour() {
@@ -598,15 +619,54 @@ function initSignaturePours() {
     setActivePour(activeIndex + direction);
   }
 
-  function preloadPourImages() {
-    pourKeys.forEach((key) => {
-      const data = BEER_DATA[key];
-      if (!data || !data.img) return;
-      const image = new Image();
-      image.decoding = "async";
-      image.src = data.img;
+  function scrollToPour(index) {
+    if (!signatureScrollTrigger) return;
+    const clampedIndex = Math.max(0, Math.min(pourKeys.length - 1, index));
+    const target = signatureScrollTrigger.start + ((signatureScrollTrigger.end - signatureScrollTrigger.start) * (clampedIndex / (pourKeys.length - 1)));
+
+    setActivePour(clampedIndex);
+    window.scrollTo({
+      top: target,
+      behavior: prefersReducedMotion ? "auto" : "smooth"
     });
   }
+
+  let stepScrollLocked = false;
+  let touchStartY = 0;
+
+  function handleSignatureStep(direction, event) {
+    if (!signatureScrollTrigger || !signatureScrollTrigger.isActive || Math.abs(direction) < 1) return;
+    if ((direction > 0 && activeIndex >= pourKeys.length - 1) || (direction < 0 && activeIndex <= 0)) return;
+
+    if (event && typeof event.preventDefault === "function") {
+      event.preventDefault();
+    }
+
+    if (stepScrollLocked) return;
+    stepScrollLocked = true;
+    scrollToPour(activeIndex + (direction > 0 ? 1 : -1));
+    window.setTimeout(() => {
+      stepScrollLocked = false;
+    }, window.innerWidth <= 768 ? 460 : 360);
+  }
+
+  function preloadPourImages() {
+    return Promise.all(Array.from(bottleLayers.values()).map((image) => {
+      if (typeof image.decode === "function") {
+        return image.decode().catch(() => undefined);
+      }
+
+      if (image.complete) return Promise.resolve();
+      return new Promise((resolve) => {
+        image.addEventListener("load", resolve, { once: true });
+        image.addEventListener("error", resolve, { once: true });
+      });
+    }));
+  }
+
+  setupSignatureImageLayers();
+  const signatureImagePreload = preloadPourImages();
+  signatureImagePreload.then(() => section.classList.add("signature-images-ready"));
 
   setActivePour(0, true, false);
 
@@ -652,9 +712,27 @@ function initSignaturePours() {
     }
   });
 
+  stage.addEventListener("wheel", (e) => {
+    handleSignatureStep(e.deltaY, e);
+  }, { passive: false });
+
+  stage.addEventListener("touchstart", (e) => {
+    if (e.touches.length) {
+      touchStartY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  stage.addEventListener("touchmove", (e) => {
+    if (!e.touches.length) return;
+    const deltaY = touchStartY - e.touches[0].clientY;
+    if (Math.abs(deltaY) < 28) return;
+    handleSignatureStep(deltaY, e);
+    touchStartY = e.touches[0].clientY;
+  }, { passive: false });
+
   function startMobileRevealMotion() {
     gsap.set(".signature-copy", { opacity: 1, y: 0 });
-    gsap.set(bottleImg, { y: 8, scale: 0.92, rotate: -1, opacity: 1 });
+    gsap.set(".signature-beer-layer.active", { y: 8, scale: 0.92, rotate: -1, opacity: 1 });
 
     gsap.to(productVisual, {
       y: -14,
@@ -706,8 +784,8 @@ function initSignaturePours() {
       }
     );
 
-    gsap.fromTo(bottleImg,
-      { y: 120, scale: 0.78, rotate: -7, opacity: 0 },
+    gsap.fromTo(".signature-beer-layer.active",
+      { y: 120, scale: 0.78, rotate: -7, opacity: 1 },
       {
         y: 22,
         scale: 0.94,
@@ -735,7 +813,6 @@ function initSignaturePours() {
       }
     });
   } else {
-    preloadPourImages();
     startMobileRevealMotion();
   }
 
@@ -780,7 +857,7 @@ function initSignaturePours() {
     pin: stage,
     pinSpacing: true,
     anticipatePin: isDesktopShowcase ? 1 : 0.85,
-    scrub: isDesktopShowcase ? 0.75 : true,
+    scrub: isDesktopShowcase ? 0.18 : true,
     invalidateOnRefresh: true,
     onEnter: () => setActivePour(0, true, false),
     onLeaveBack: () => setActivePour(0, true, false),
@@ -791,7 +868,7 @@ function initSignaturePours() {
       if (isMobileShowcase) return;
 
       const phase = self.progress * Math.PI * 2;
-      gsap.to(bottleImg, {
+      gsap.to(activeBottleLayer, {
         y: 18 + Math.sin(phase) * 16,
         rotate: -1 + Math.sin(phase * 0.7) * 2.5,
         duration: 0.35,

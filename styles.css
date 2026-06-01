@@ -1091,6 +1091,7 @@ a {
 }
 
 .signature-product-visual {
+  position: relative;
   min-height: 660px;
   display: flex;
   align-items: center;
@@ -1141,6 +1142,20 @@ a {
   transform: translateY(22px) scale(0.94) rotate(-1deg);
   transition: opacity 0.45s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease;
   will-change: transform, opacity;
+}
+
+.signature-beer-layer {
+  position: absolute;
+  inset: auto;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(34px) scale(0.9) rotate(2deg);
+  transition: opacity 0.38s ease, transform 0.58s cubic-bezier(0.16, 1, 0.3, 1), filter 0.58s ease;
+}
+
+.signature-beer-layer.active {
+  opacity: 1;
+  transform: translateY(22px) scale(0.94) rotate(-1deg);
 }
 
 .signature-bottle-img.is-swapping {
@@ -1323,6 +1338,14 @@ a {
     transition: opacity 0.24s ease, filter 0.45s ease;
     transform: translateZ(0);
     backface-visibility: hidden;
+  }
+
+  .signature-beer-layer {
+    transition: opacity 0.24s ease, transform 0.46s cubic-bezier(0.16, 1, 0.3, 1), filter 0.38s ease;
+  }
+
+  .signature-beer-layer.active {
+    transform: translateY(8px) scale(0.92) rotate(-1deg);
   }
 
   .signature-shadow {
@@ -3019,6 +3042,36 @@ body.mobile-menu-active .flow-voice-agent {
   opacity: 0 !important;
   pointer-events: none !important;
   transform: translate3d(0, 12px, 0) !important;
+}
+
+.flow-voice-return {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 5.2rem);
+  right: 0.85rem;
+  z-index: 2147483647;
+  border: 1px solid rgba(34, 34, 34, 0.18);
+  background: rgba(246, 244, 240, 0.94);
+  color: var(--text-color);
+  box-shadow: 0 14px 34px rgba(15, 27, 41, 0.18);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 999px;
+  padding: 0.72rem 1rem;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.24s ease, transform 0.24s ease;
+}
+
+body.flow-voice-expanded:not(.mobile-menu-active) .flow-voice-return {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .flow-voice-agent::before {

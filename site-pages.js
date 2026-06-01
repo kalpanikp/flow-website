@@ -105,6 +105,8 @@
   function setupElevenLabsConcierge() {
     if (byId("flow-voice-agent")) return;
     let mounted = false;
+    let voiceWidget = null;
+    let voiceReturnButton = null;
     const engagementEvents = ["scroll", "pointerdown", "keydown", "touchstart"];
 
     function applyFlowConciergeBranding(widget) {
@@ -185,6 +187,46 @@
       });
     }
 
+    function hideVoiceReturnControl() {
+      document.body.classList.remove("flow-voice-expanded");
+    }
+
+    function resetVoiceConcierge() {
+      hideVoiceReturnControl();
+      document.body.classList.remove("flow-voice-ready");
+
+      if (voiceWidget) {
+        voiceWidget.remove();
+        voiceWidget = null;
+      }
+
+      if (voiceReturnButton) {
+        voiceReturnButton.remove();
+        voiceReturnButton = null;
+      }
+
+      mounted = false;
+      window.setTimeout(mountConcierge, 650);
+    }
+
+    function setupVoiceReturnControl(widget) {
+      voiceReturnButton = document.createElement("button");
+      voiceReturnButton.type = "button";
+      voiceReturnButton.className = "flow-voice-return";
+      voiceReturnButton.textContent = "Back to site";
+      voiceReturnButton.setAttribute("aria-label", "Close Flow Concierge and return to the website");
+      voiceReturnButton.addEventListener("click", resetVoiceConcierge);
+      document.body.appendChild(voiceReturnButton);
+
+      widget.addEventListener("pointerdown", () => {
+        if (window.innerWidth <= 900) {
+          window.setTimeout(() => {
+            document.body.classList.add("flow-voice-expanded");
+          }, 300);
+        }
+      });
+    }
+
     function mountConcierge() {
       if (mounted || !hasEnteredSite()) return;
       mounted = true;
@@ -208,7 +250,9 @@
       widget.setAttribute("speaking-text", "Flow Concierge is speaking...");
 
       document.body.appendChild(widget);
+      voiceWidget = widget;
       applyFlowConciergeBranding(widget);
+      setupVoiceReturnControl(widget);
       loadWidgetScript();
       removeEngagementListeners();
       window.requestAnimationFrame(() => {
