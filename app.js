@@ -823,7 +823,7 @@ function initSignaturePours() {
   signatureScrollTrigger = ScrollTrigger.create({
     trigger: section,
     start: "top top",
-    end: () => `+=${window.innerHeight * (isDesktopShowcase ? pourKeys.length + 0.7 : pourKeys.length - 1)}`,
+    end: () => `+=${window.innerHeight * (isDesktopShowcase ? pourKeys.length + 4 : pourKeys.length - 1)}`,
     pin: stage,
     pinSpacing: true,
     anticipatePin: isDesktopShowcase ? 1 : 0.85,
