@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <defs>
+    <!-- Liquid gradients -->
+    <linearGradient id="splashGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E2F1F8" stop-opacity="0.9" />
+      <stop offset="40%" stop-color="#80DEEA" stop-opacity="0.6" />
+      <stop offset="85%" stop-color="#00ACC1" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#006064" stop-opacity="0.2" />
+    </linearGradient>
+    <radialGradient id="dropGrad" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="50%" stop-color="#80DEEA" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#00838F" stop-opacity="0.1" />
+    </radialGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Splashing dynamic body -->
+  <g filter="url(#glow)">
+    <path d="M 120 180 
+             C 100 120, 50 140, 40 100 
+             C 30 70, 70 70, 90 90 
+             C 110 110, 120 150, 140 130 
+             C 170 100, 150 40, 180 30 
+             C 210 20, 210 70, 190 100 
+             C 170 130, 190 160, 210 150 
+             C 240 135, 250 100, 270 110 
+             C 290 120, 280 150, 240 180 
+             C 200 210, 150 200, 120 180 Z" 
+          fill="url(#splashGrad)" />
+  </g>
+
+  <!-- Potted droplets surrounding the main splash -->
+  <circle cx="65" cy="50" r="10" fill="url(#dropGrad)" />
+  <circle cx="240" cy="65" r="8" fill="url(#dropGrad)" />
+  <circle cx="120" cy="35" r="6" fill="url(#dropGrad)" />
+  <circle cx="155" cy="235" r="12" fill="url(#dropGrad)" />
+  <circle cx="95" cy="210" r="7" fill="url(#dropGrad)" />
+  <circle cx="215" cy="215" r="9" fill="url(#dropGrad)" />
+  <circle cx="270" cy="200" r="5" fill="url(#dropGrad)" />
+  
+  <!-- Droplet highlights -->
+  <circle cx="62" cy="46" r="3" fill="#FFFFFF" opacity="0.6" />
+  <circle cx="238" cy="62" r="2.5" fill="#FFFFFF" opacity="0.6" />
+  <circle cx="151" cy="230" r="4" fill="#FFFFFF" opacity="0.6" />
+</svg>

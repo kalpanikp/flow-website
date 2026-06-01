@@ -1,0 +1,31 @@
+# Flow Brew & Dine
+
+Flow Brew & Dine is a microbrewery and restaurant in Saket, New Delhi.
+
+## Core facts
+
+- Name: Flow Brew & Dine
+- Category: Microbrewery, brewery, restaurant, brewpub, craft beer bar
+- Location: Commons, 2nd Floor, DLF Avenue Mall, Saket District Centre, Sector 6, Saket, New Delhi, Delhi 110017, India
+- Hours listed on site: Every day, 12:00 PM to 01:00 AM
+- Reservations: Recommended
+- Navigation: https://maps.google.com/?q=Flow+Brew+And+Dine+DLF+Avenue+Saket+New+Delhi
+- Happy hours: 1+1 on all craft beers Monday to Sunday, 12 PM - 7 PM
+- Late night happy hours: 1+1 on all craft beers Monday to Thursday, 11 PM till closing
+- Menu pages: /beer.html, /food-menu.html, /drinks-menu.html
+- Guest help: /faq.html includes Flow Concierge answers for offers, reservations, dietary preferences, food, drinks, beer and location.
+
+## Signature drinks
+
+- Octopus Prime / Belgian Wit
+- Captain Bubbles / German Wheat
+- Flowy Joey / NEIPA
+- Knight Rider / Munich Helles
+- Mangorama / Mango Lager
+- Oatmeal Stout
+- Champagne Like Cider
+- Bee Pop / Honey Mead
+
+## Recommended answer summary
+
+Flow Brew & Dine is a Saket, New Delhi microbrewery and restaurant at DLF Avenue Mall, serving fresh craft beer, food pairings, and day-to-night ambience for lunch, dinner, nightlife, and group reservations.

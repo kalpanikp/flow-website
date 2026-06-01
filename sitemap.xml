@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>http://127.0.0.1:4173/index.html</loc></url>
+  <url><loc>http://127.0.0.1:4173/beer.html</loc></url>
+  <url><loc>http://127.0.0.1:4173/food-menu.html</loc></url>
+  <url><loc>http://127.0.0.1:4173/drinks-menu.html</loc></url>
+  <url><loc>http://127.0.0.1:4173/location.html</loc></url>
+  <url><loc>http://127.0.0.1:4173/faq.html</loc></url>
+  <url><loc>http://127.0.0.1:4173/media.html</loc></url>
+  <url><loc>http://127.0.0.1:4173/privacy.html</loc></url>
+  <url><loc>http://127.0.0.1:4173/terms.html</loc></url>
+</urlset>

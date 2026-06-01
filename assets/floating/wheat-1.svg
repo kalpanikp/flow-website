@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 450" width="100%" height="100%">
+  <defs>
+    <!-- Premium golden gradients -->
+    <linearGradient id="wheatGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE8A3" />
+      <stop offset="50%" stop-color="#DCA245" />
+      <stop offset="100%" stop-color="#9C6B1C" />
+    </linearGradient>
+    <filter id="wheatShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="2" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#wheatShadow)">
+    <!-- Main stem (curved slightly for dynamic flow feeling) -->
+    <path d="M 75 430 Q 75 250, 75 30" fill="none" stroke="url(#wheatGold)" stroke-width="4.5" stroke-linecap="round" />
+
+    <!-- Kernels / Grains (Alternating left and right) -->
+    <!-- Level 1 (Bottom) -->
+    <path d="M 75 320 C 50 310, 45 285, 75 280 C 75 280, 75 320, 75 320 Z" fill="url(#wheatGold)" />
+    <path d="M 75 320 C 100 310, 105 285, 75 280 C 75 280, 75 320, 75 320 Z" fill="url(#wheatGold)" />
+    
+    <!-- Level 2 -->
+    <path d="M 75 280 C 45 270, 40 245, 75 240 C 75 240, 75 280, 75 280 Z" fill="url(#wheatGold)" />
+    <path d="M 75 280 C 105 270, 110 245, 75 240 C 75 240, 75 280, 75 280 Z" fill="url(#wheatGold)" />
+
+    <!-- Level 3 -->
+    <path d="M 75 240 C 45 230, 40 205, 75 200 C 75 200, 75 240, 75 240 Z" fill="url(#wheatGold)" />
+    <path d="M 75 240 C 105 240, 110 205, 75 200 C 75 200, 75 240, 75 240 Z" fill="url(#wheatGold)" />
+
+    <!-- Level 4 -->
+    <path d="M 75 200 C 45 190, 40 165, 75 160 C 75 160, 75 200, 75 200 Z" fill="url(#wheatGold)" />
+    <path d="M 75 200 C 105 190, 110 165, 75 160 C 75 160, 75 200, 75 200 Z" fill="url(#wheatGold)" />
+
+    <!-- Level 5 -->
+    <path d="M 75 160 C 48 150, 43 125, 75 120 C 75 120, 75 160, 75 160 Z" fill="url(#wheatGold)" />
+    <path d="M 75 160 C 102 150, 107 125, 75 120 C 75 120, 75 160, 75 160 Z" fill="url(#wheatGold)" />
+
+    <!-- Level 6 -->
+    <path d="M 75 120 C 50 110, 45 85, 75 80 C 75 80, 75 120, 75 120 Z" fill="url(#wheatGold)" />
+    <path d="M 75 120 C 100 110, 105 85, 75 80 C 75 80, 75 120, 75 120 Z" fill="url(#wheatGold)" />
+
+    <!-- Level 7 (Top) -->
+    <path d="M 75 80 C 55 70, 50 50, 75 42 C 75 42, 75 80, 75 80 Z" fill="url(#wheatGold)" />
+    <path d="M 75 80 C 95 70, 100 50, 75 42 C 75 42, 75 80, 75 80 Z" fill="url(#wheatGold)" />
+    <path d="M 75 42 C 60 35, 60 15, 75 10 Q 75 42, 75 42 Z" fill="url(#wheatGold)" />
+
+    <!-- Long Whisker-like Awns (Beards of the wheat) -->
+    <!-- Left side awns -->
+    <path d="M 50 290 Q 20 250, 10 200" fill="none" stroke="url(#wheatGold)" stroke-width="1" stroke-linecap="round" />
+    <path d="M 50 250 Q 18 210, 8 160" fill="none" stroke="url(#wheatGold)" stroke-width="1" stroke-linecap="round" />
+    <path d="M 50 210 Q 15 170, 5 120" fill="none" stroke="url(#wheatGold)" stroke-width="1" stroke-linecap="round" />
+    <path d="M 50 170 Q 15 130, 8 80" fill="none" stroke="url(#wheatGold)" stroke-width="1" stroke-linecap="round" />
+    <path d="M 50 130 Q 18 90, 12 40" fill="none" stroke="url(#wheatGold)" stroke-width="1" stroke-linecap="round" />
+    <path d="M 52 90 Q 20 50, 18 10" fill="none" stroke="url(#wheatGold)" stroke-width="1" stroke-linecap="round" />
+
+    <!-- Right side awns -->
+    <path d="M 100 290 Q 130 250, 140 200" fill="none" stroke="url(#wheatGold)" stroke-width="1" stroke-linecap="round" />
+    <path d="M 100 250 Q 132 210, 142 160" fill="none" stroke="url(#wheatGold)" stroke-width="1" stroke-linecap="round" />
+    <path d="M 100 210 Q 135 170, 145 120" fill="none" stroke="url(#wheatGold)" stroke-width="1" stroke-linecap="round" />
+    <path d="M 100 170 Q 135 130, 142 80" fill="none" stroke="url(#wheatGold)" stroke-width="1" stroke-linecap="round" />
+    <path d="M 100 130 Q 132 90, 138 40" fill="none" stroke="url(#wheatGold)" stroke-width="1" stroke-linecap="round" />
+    <path d="M 98 90 Q 130 50, 132 10" fill="none" stroke="url(#wheatGold)" stroke-width="1" stroke-linecap="round" />
+    
+    <!-- Top Awn -->
+    <path d="M 75 10 L 75 -25" fill="none" stroke="url(#wheatGold)" stroke-width="1.5" stroke-linecap="round" />
+  </g>
+</svg>
