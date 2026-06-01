@@ -107,6 +107,56 @@
     let mounted = false;
     const engagementEvents = ["scroll", "pointerdown", "keydown", "touchstart"];
 
+    function applyFlowConciergeBranding(widget) {
+      const replacements = new Map([
+        ["Need help?", "What's on tap?"],
+        ["Start a call", "Find your perfect pour"]
+      ]);
+
+      function updateText(root) {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        let node = walker.nextNode();
+
+        while (node) {
+          const nextNode = walker.nextNode();
+          replacements.forEach((replacement, source) => {
+            if (node.nodeValue && node.nodeValue.includes(source)) {
+              node.nodeValue = node.nodeValue.replaceAll(source, replacement);
+            }
+          });
+          node = nextNode;
+        }
+
+        root.querySelectorAll("[aria-label]").forEach((element) => {
+          const label = element.getAttribute("aria-label");
+          replacements.forEach((replacement, source) => {
+            if (label && label.includes(source)) {
+              element.setAttribute("aria-label", label.replaceAll(source, replacement));
+            }
+          });
+        });
+      }
+
+      function brandShadowRoot() {
+        if (!widget.shadowRoot) {
+          window.setTimeout(brandShadowRoot, 200);
+          return;
+        }
+
+        updateText(widget.shadowRoot);
+        const observer = new MutationObserver(() => updateText(widget.shadowRoot));
+        observer.observe(widget.shadowRoot, {
+          childList: true,
+          subtree: true,
+          characterData: true,
+          attributes: true,
+          attributeFilter: ["aria-label"]
+        });
+      }
+
+      brandShadowRoot();
+    }
+
     function loadWidgetScript() {
       if (document.querySelector('script[data-flow-elevenlabs-widget="true"]')) return;
       const script = document.createElement("script");
@@ -130,14 +180,15 @@
       widget.id = "flow-voice-agent";
       widget.setAttribute("aria-label", "Flow Concierge voice agent");
       widget.setAttribute("agent-id", "agent_0401kt1jdzr0epdryce575wve93t");
-      widget.setAttribute("action-text", "Talk to Flow Concierge");
-      widget.setAttribute("expand-text", "Find your perfect pour");
-      widget.setAttribute("start-call-text", "Start Flow Concierge");
+      widget.setAttribute("action-text", "What's on tap?");
+      widget.setAttribute("expand-text", "Talk to Flow Concierge");
+      widget.setAttribute("start-call-text", "Find your perfect pour");
       widget.setAttribute("end-call-text", "End call");
       widget.setAttribute("listening-text", "Flow Concierge is listening...");
       widget.setAttribute("speaking-text", "Flow Concierge is speaking...");
 
       document.body.appendChild(widget);
+      applyFlowConciergeBranding(widget);
       loadWidgetScript();
       engagementEvents.forEach((eventName) => {
         window.removeEventListener(eventName, requestMount);
