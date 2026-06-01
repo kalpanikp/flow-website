@@ -142,9 +142,6 @@
     widget.setAttribute("end-call-text", "End call");
     widget.setAttribute("listening-text", "Flow Concierge is listening...");
     widget.setAttribute("speaking-text", "Flow Concierge is speaking...");
-    widget.setAttribute("override-first-message", "Looking to reserve a table, discover our craft beers, plan an event, or learn more about Flow?");
-    widget.setAttribute("avatar-orb-color-1", "#C89D4B");
-    widget.setAttribute("avatar-orb-color-2", "#F6F4F0");
 
     document.body.appendChild(widget);
 
