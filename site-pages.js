@@ -102,50 +102,12 @@
     });
   }
 
-  function setupConcierge() {
-    ensureFloctopusWidget();
-
-    const panel = byId("flow-concierge-panel");
-    const trigger = byId("flow-concierge-trigger");
-    const input = byId("concierge-input");
-    const answer = byId("concierge-answer");
-    if (!panel || !trigger || !input || !answer) return;
-
-    function respond() {
-      const query = input.value.trim().toLowerCase();
-      if (!query) return;
-      answer.textContent = answerFloctopus(query);
-    }
-
-    trigger.addEventListener("click", () => {
-      panel.classList.toggle("open");
-      if (panel.classList.contains("open")) input.focus();
-    });
-
-    byId("concierge-ask")?.addEventListener("click", respond);
-    input.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") respond();
-    });
-  }
-
   function setupElevenLabsConcierge() {
     if (byId("flow-voice-agent")) return;
+    let mounted = false;
+    const engagementEvents = ["scroll", "pointerdown", "keydown", "touchstart"];
 
-    const widget = document.createElement("elevenlabs-convai");
-    widget.className = "flow-voice-agent";
-    widget.id = "flow-voice-agent";
-    widget.setAttribute("aria-label", "Flow Concierge voice agent");
-    widget.setAttribute("agent-id", "agent_0401kt1jdzr0epdryce575wve93t");
-    widget.setAttribute("action-text", "Flow Concierge");
-    widget.setAttribute("expand-text", "Flow Concierge");
-    widget.setAttribute("start-call-text", "Start Flow Concierge");
-    widget.setAttribute("end-call-text", "End call");
-    widget.setAttribute("listening-text", "Flow Concierge is listening...");
-    widget.setAttribute("speaking-text", "Flow Concierge is speaking...");
-
-    document.body.appendChild(widget);
-
-    const loadWidgetScript = () => {
+    function loadWidgetScript() {
       if (document.querySelector('script[data-flow-elevenlabs-widget="true"]')) return;
       const script = document.createElement("script");
       script.src = "https://unpkg.com/@elevenlabs/convai-widget-embed";
@@ -153,106 +115,47 @@
       script.type = "text/javascript";
       script.dataset.flowElevenlabsWidget = "true";
       document.body.appendChild(script);
-    };
+    }
 
-    const scheduleScriptLoad = () => {
-      if ("requestIdleCallback" in window) {
-        window.requestIdleCallback(loadWidgetScript, { timeout: 600 });
-      } else {
-        window.setTimeout(loadWidgetScript, 250);
+    function hasEnteredSite() {
+      return !document.documentElement.classList.contains("preloader-active") && !document.body.classList.contains("preloader-active");
+    }
+
+    function mountConcierge() {
+      if (mounted || !hasEnteredSite()) return;
+      mounted = true;
+
+      const widget = document.createElement("elevenlabs-convai");
+      widget.className = "flow-voice-agent";
+      widget.id = "flow-voice-agent";
+      widget.setAttribute("aria-label", "Flow Concierge voice agent");
+      widget.setAttribute("agent-id", "agent_0401kt1jdzr0epdryce575wve93t");
+      widget.setAttribute("action-text", "Talk to Flow Concierge");
+      widget.setAttribute("expand-text", "Find your perfect pour");
+      widget.setAttribute("start-call-text", "Start Flow Concierge");
+      widget.setAttribute("end-call-text", "End call");
+      widget.setAttribute("listening-text", "Flow Concierge is listening...");
+      widget.setAttribute("speaking-text", "Flow Concierge is speaking...");
+
+      document.body.appendChild(widget);
+      loadWidgetScript();
+      engagementEvents.forEach((eventName) => {
+        window.removeEventListener(eventName, requestMount);
+      });
+      window.requestAnimationFrame(() => {
+        document.body.classList.add("flow-voice-ready");
+      });
+    }
+
+    function requestMount() {
+      if (hasEnteredSite()) {
+        window.setTimeout(mountConcierge, 700);
       }
-    };
-
-    if (document.readyState === "complete") {
-      scheduleScriptLoad();
-    } else {
-      window.addEventListener("load", scheduleScriptLoad, { once: true });
-    }
-  }
-
-  function ensureFloctopusWidget() {
-    if (byId("flow-concierge-panel")) return;
-
-    document.body.insertAdjacentHTML("beforeend", `
-      <div class="flow-concierge" aria-label="Floctopus">
-        <div class="flow-concierge-panel" id="flow-concierge-panel">
-          <h3>Floctopus</h3>
-          <p>Your Flow concierge. Ask about beers, menus, happy hours, dietary preferences, reservations or location.</p>
-          <input id="concierge-input" placeholder="Ask Floctopus">
-          <button id="concierge-ask" class="btn-book-table" type="button">Ask</button>
-          <p id="concierge-answer" class="concierge-answer">Try: "What should I order if I like citrus beer?"</p>
-        </div>
-        <button id="flow-concierge-trigger" class="flow-concierge-trigger" type="button" aria-label="Open Floctopus">
-          <img src="Public/Mascot/Mascot-03 (1).png" alt="">
-        </button>
-      </div>
-    `);
-  }
-
-  function answerFloctopus(query) {
-    const beers = data.beers || [];
-    const foodGroups = data.food || [];
-    const drinksGroups = data.drinks || [];
-    const allFood = foodGroups.flatMap((group) => group.items.map((item) => ({ category: group.category, item })));
-    const allDrinks = drinksGroups.flatMap((group) => group.items.map((item) => ({ category: group.category, item })));
-    const beerList = beers.map((beer) => `${beer.displayName} (${beer.style}, ABV ${beer.abv})`).join(", ");
-
-    const includesAny = (...words) => words.some((word) => query.includes(word));
-    const findFrom = (collection, fields) => collection.filter((entry) => fields(entry).some((value) => value && query.includes(String(value).toLowerCase())));
-
-    const matchedBeers = findFrom(beers, (beer) => [beer.name, beer.displayName, beer.style, beer.desc, beer.pairing]);
-    if (matchedBeers.length) {
-      const beer = matchedBeers[0];
-      return `${beer.displayName} is ${beer.style} with ABV ${beer.abv} and IBU ${beer.ibu}. ${beer.desc} Pairing cue: ${beer.pairing}`;
     }
 
-    const matchedFood = findFrom(allFood, (entry) => [entry.category, entry.item[0], entry.item[1], entry.item[3]]);
-    if (matchedFood.length && includesAny("food", "eat", "dish", "veg", "vegan", "gluten", "paneer", "chicken", "prawn", "pizza", "dessert", "salad", "bao")) {
-      return matchedFood.slice(0, 4).map((entry) => `${entry.item[0]}: ${entry.item[1]}${entry.item[2] ? ` (${entry.item[2]})` : ""}`).join(" ");
-    }
-
-    const matchedDrinks = findFrom(allDrinks, (entry) => [entry.category, entry.item[0], entry.item[1]]);
-    if (matchedDrinks.length && includesAny("drink", "cocktail", "bar", "sangria", "liit", "gin", "tequila", "whiskey", "rum", "vodka")) {
-      return matchedDrinks.slice(0, 4).map((entry) => `${entry.item[0]}: ${entry.item[1]}${entry.item[2] ? ` (${entry.item[2]})` : ""}`).join(" ");
-    }
-
-    if (includesAny("happy", "offer", "discount", "1+1", "one plus one", "aggregator", "zomato", "swiggy", "dineout", "magicpin", "eazydiner")) {
-      return "Flow happy hours: 1+1 on all craft beers Monday to Sunday from 12 PM to 7 PM. Late night Happy Hours: 1+1 craft beers Monday to Thursday from 11 PM till closing. Aggregator discounts can vary across Zomato, Swiggy Dineout, Magicpin and EazyDiner.";
-    }
-
-    if (includesAny("time", "timing", "open", "close", "closing", "hours")) {
-      return "Flow is listed as open every day from 12 PM to 1 AM. Offer timings and special event timings should be confirmed with the restaurant for the day you plan to visit.";
-    }
-
-    if (includesAny("reserve", "reservation", "book", "table", "party", "birthday", "group")) {
-      return "You can request a table through the reservation widget on the website. For urgent bookings, larger groups or events, call Flow directly at +91 98991 99138 or 011-41092685.";
-    }
-
-    if (includesAny("location", "address", "where", "map", "parking", "direction")) {
-      return "Flow Brew & Dine is at Commons, 2nd Floor, DLF Avenue Mall, 312 B & C, A4, South, Saket District Centre, New Delhi 110017. Use the Location page for map and directions.";
-    }
-
-    if (includesAny("beer", "brew", "craft", "tap", "abv", "ibu")) {
-      return `Flow's house brews include ${beerList}. Ask me about any beer by name, style, ABV, pairing or flavour.`;
-    }
-
-    if (includesAny("vegetarian", "veg")) {
-      return "Vegetarian options include Rose Harissa Paneer Tikka, Baby Potatoes with Saffron Yogurt, Avo & Beet, Eat Your Greens, vegetarian baos, Margherita, Italian Farm and more.";
-    }
-
-    if (includesAny("vegan")) {
-      return "Vegan-friendly options appear on the menu, including plant-forward baos and salads. Please confirm with the team for strict vegan preparation and cross-contact handling.";
-    }
-
-    if (includesAny("gluten", "allergy", "allergic", "nuts")) {
-      return "Some menu items indicate gluten-free or nut-related preferences, but allergies should be confirmed with the restaurant team before ordering because kitchen handling can vary.";
-    }
-
-    if (includesAny("media", "press", "coverage", "featured")) {
-      return "Flow has external coverage/listings on NDTV Food, DLF Avenue, Zomato, Swiggy Dineout, Magicpin, EazyDiner, LBB and GlobalSpa. Visit the Media page for backlinks.";
-    }
-
-    return "Floctopus can help with Flow's beers, food, drinks, happy hours, aggregator discounts, reservations, location, dietary preferences and media coverage. Try asking for a flavour, dish, drink, offer or booking need.";
+    engagementEvents.forEach((eventName) => {
+      window.addEventListener(eventName, requestMount, { passive: true });
+    });
   }
 
   function setupReveals() {
@@ -282,7 +185,6 @@
     renderBeerGrid();
     renderCoverage();
     setupReservation();
-    setupConcierge();
     setupElevenLabsConcierge();
     setupReveals();
   });
