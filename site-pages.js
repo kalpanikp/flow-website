@@ -277,11 +277,16 @@
 
       const list = nav.querySelector("ul");
       if (list && !nav.dataset.mobileLinksReady) {
-        const existingHrefs = Array.from(list.querySelectorAll("a")).map((link) => link.getAttribute("href"));
-        mobileLinks.forEach(([label, href]) => {
-          if (existingHrefs.includes(href)) return;
+        const isHomePage = window.location.pathname.endsWith("index.html") || window.location.pathname.endsWith("/");
+        const links = mobileLinks.map(([label, href]) => [
+          label,
+          label === "Book a Table" && isHomePage ? "#reservations" : href
+        ]);
+
+        list.innerHTML = "";
+        links.forEach(([label, href]) => {
           const item = document.createElement("li");
-          item.className = "mobile-menu-extra";
+          item.className = "mobile-menu-item";
           item.innerHTML = `<a href="${href}" class="nav-link">${label}</a>`;
           list.appendChild(item);
         });

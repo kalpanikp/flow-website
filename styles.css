@@ -415,7 +415,7 @@ a {
 @media (max-width: 1024px) {
   .main-header {
     padding: 0.7rem 0;
-    z-index: 2147483646;
+    z-index: 2147483647;
   }
 
   .header-container {
@@ -436,7 +436,7 @@ a {
     left: 4%;
     right: 4%;
     width: auto;
-    z-index: 2147483646;
+    z-index: 2147483647;
     overflow: hidden;
     max-height: 0;
     opacity: 0;
@@ -451,10 +451,12 @@ a {
   }
 
   .main-header.mobile-menu-open .nav-menu {
-    max-height: 440px;
+    max-height: min(72svh, 620px);
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .nav-menu ul {
@@ -472,7 +474,8 @@ a {
     border-bottom: 1px solid rgba(34, 34, 34, 0.08);
   }
 
-  .mobile-menu-extra {
+  .mobile-menu-extra,
+  .mobile-menu-item {
     display: list-item;
   }
 
@@ -494,7 +497,8 @@ a {
   }
 }
 
-.mobile-menu-extra {
+.mobile-menu-extra,
+.mobile-menu-item {
   display: none;
 }
 
@@ -543,7 +547,8 @@ a {
     display: inline-flex;
   }
 
-  .mobile-menu-extra {
+  .mobile-menu-extra,
+  .mobile-menu-item {
     display: list-item;
   }
 }
@@ -2988,7 +2993,7 @@ a {
   position: fixed !important;
   right: clamp(0.85rem, 2vw, 1.25rem);
   bottom: clamp(0.85rem, 2vw, 1.25rem);
-  z-index: 2147483647 !important;
+  z-index: 2147483645 !important;
   display: block !important;
   visibility: visible !important;
   opacity: 0 !important;
@@ -3068,10 +3073,8 @@ elevenlabs-convai.flow-voice-agent {
   .flow-voice-agent {
     right: 0.75rem;
     bottom: 0.75rem;
-    width: 96px !important;
-    height: 96px !important;
-    max-width: 96px;
-    max-height: 96px;
+    max-width: calc(100vw - 1.5rem);
+    max-height: calc(100svh - 1.5rem);
     min-width: 84px;
     min-height: 84px;
     overflow: visible !important;
