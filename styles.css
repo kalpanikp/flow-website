@@ -1264,7 +1264,8 @@ a {
     padding: clamp(4.7rem, 10vh, 5.8rem) 6% clamp(1.2rem, 3vh, 2.4rem);
     text-align: center;
     transform: translateZ(0);
-    will-change: transform;
+    will-change: auto;
+    contain: layout paint;
   }
 
   .signature-copy {
@@ -1364,6 +1365,37 @@ a {
     bottom: auto;
     justify-self: center;
     margin-top: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .webgl-bg-container {
+    display: none !important;
+  }
+
+  .signature-bg-orbit {
+    inset: 15% 5%;
+    opacity: 0.72;
+  }
+
+  .signature-pours-section,
+  .signature-product-visual,
+  .signature-info-stack {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .signature-bottle-img,
+  .signature-info-card,
+  .signature-dot {
+    backface-visibility: hidden;
+  }
+
+  .brews-parallax-bg-text {
+    will-change: auto;
   }
 }
 

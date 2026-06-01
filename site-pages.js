@@ -171,9 +171,29 @@
       return !document.documentElement.classList.contains("preloader-active") && !document.body.classList.contains("preloader-active");
     }
 
+    function canUseVoiceConcierge() {
+      return Boolean(
+        window.isSecureContext &&
+        navigator.mediaDevices &&
+        typeof navigator.mediaDevices.getUserMedia === "function"
+      );
+    }
+
+    function removeEngagementListeners() {
+      engagementEvents.forEach((eventName) => {
+        window.removeEventListener(eventName, requestMount);
+      });
+    }
+
     function mountConcierge() {
       if (mounted || !hasEnteredSite()) return;
       mounted = true;
+
+      if (!canUseVoiceConcierge()) {
+        removeEngagementListeners();
+        document.body.classList.add("flow-voice-unavailable");
+        return;
+      }
 
       const widget = document.createElement("elevenlabs-convai");
       widget.className = "flow-voice-agent";
@@ -190,9 +210,7 @@
       document.body.appendChild(widget);
       applyFlowConciergeBranding(widget);
       loadWidgetScript();
-      engagementEvents.forEach((eventName) => {
-        window.removeEventListener(eventName, requestMount);
-      });
+      removeEngagementListeners();
       window.requestAnimationFrame(() => {
         document.body.classList.add("flow-voice-ready");
       });

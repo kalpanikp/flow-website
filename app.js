@@ -505,6 +505,7 @@ function initSignaturePours() {
   let hasMovedSignature = false;
   let suppressOpenUntil = 0;
   let signatureScrollTrigger = null;
+  let mobileLastScrollIndex = -1;
 
   function setActivePour(index, instant = false, withFeedback = true) {
     const clampedIndex = ((index % pourKeys.length) + pourKeys.length) % pourKeys.length;
@@ -587,6 +588,16 @@ function initSignaturePours() {
 
   function movePour(direction) {
     setActivePour(activeIndex + direction);
+  }
+
+  function preloadPourImages() {
+    pourKeys.forEach((key) => {
+      const data = BEER_DATA[key];
+      if (!data || !data.img) return;
+      const image = new Image();
+      image.decoding = "async";
+      image.src = data.img;
+    });
   }
 
   setActivePour(0, true, false);
@@ -716,7 +727,42 @@ function initSignaturePours() {
       }
     });
   } else {
+    preloadPourImages();
     startMobileRevealMotion();
+  }
+
+  if (isMobileShowcase) {
+    signatureScrollTrigger = ScrollTrigger.create({
+      trigger: section,
+      start: "top top",
+      end: () => `+=${window.innerHeight * (pourKeys.length + 0.35)}`,
+      pin: stage,
+      pinSpacing: true,
+      anticipatePin: 1,
+      scrub: false,
+      invalidateOnRefresh: true,
+      snap: {
+        snapTo: 1 / (pourKeys.length - 1),
+        duration: { min: 0.22, max: 0.42 },
+        delay: 0.035,
+        ease: "power2.out"
+      },
+      onEnter: () => {
+        mobileLastScrollIndex = -1;
+        setActivePour(0, true, false);
+      },
+      onLeaveBack: () => {
+        mobileLastScrollIndex = -1;
+        setActivePour(0, true, false);
+      },
+      onUpdate: (self) => {
+        const index = Math.round(self.progress * (pourKeys.length - 1));
+        if (index === mobileLastScrollIndex) return;
+        mobileLastScrollIndex = index;
+        setActivePour(index);
+      }
+    });
+    return;
   }
 
   signatureScrollTrigger = ScrollTrigger.create({
@@ -1514,10 +1560,10 @@ function initHeroSequence() {
     };
     images[0] = firstImg; // Store at index 0 (frame index 0 corresponds to startFrame)
 
-    // 3. Background load subsequent frames in parallel immediately (True Parallel Load)
-    for (let i = startFrame + 1; i <= endFrame; i++) {
+    function loadFrame(i) {
       const arrayIndex = i - startFrame;
       const img = new Image();
+      img.decoding = "async";
       img.src = currentFrame(i);
       img.onload = () => {
         trackProgress();
@@ -1526,6 +1572,30 @@ function initHeroSequence() {
         trackProgress();
       };
       images[arrayIndex] = img;
+    }
+
+    if (isMobile) {
+      const essentialFrameCount = 12;
+      const essentialEnd = Math.min(endFrame, startFrame + essentialFrameCount - 1);
+
+      for (let i = startFrame + 1; i <= essentialEnd; i++) {
+        loadFrame(i);
+      }
+
+      let nextFrame = essentialEnd + 1;
+      const loadNextIdleFrame = () => {
+        if (nextFrame > endFrame) return;
+        loadFrame(nextFrame);
+        nextFrame++;
+        window.setTimeout(loadNextIdleFrame, 70);
+      };
+
+      window.setTimeout(loadNextIdleFrame, 500);
+    } else {
+      // Desktop can afford the richer parallel preload without hurting touch response.
+      for (let i = startFrame + 1; i <= endFrame; i++) {
+        loadFrame(i);
+      }
     }
 
     // 4. GSAP ScrollTrigger Logic with Bulletproof Programmatic Pinning (STRICT USER SPECIFICATION)
@@ -1588,6 +1658,7 @@ function initHeroSequence() {
    ========================================================================== */
 function initWebGLBackground() {
   if (prefersReducedMotion) return;
+  if (window.innerWidth <= 768) return;
 
   const canvas = document.getElementById("webgl-bg-canvas");
   const container = document.querySelector(".webgl-bg-container");
