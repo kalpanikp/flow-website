@@ -415,6 +415,7 @@ a {
 @media (max-width: 1024px) {
   .main-header {
     padding: 0.7rem 0;
+    z-index: 2147483646;
   }
 
   .header-container {
@@ -435,6 +436,7 @@ a {
     left: 4%;
     right: 4%;
     width: auto;
+    z-index: 2147483646;
     overflow: hidden;
     max-height: 0;
     opacity: 0;
@@ -488,6 +490,7 @@ a {
   .mobile-menu-toggle {
     display: inline-flex;
     order: 2;
+    pointer-events: auto;
   }
 }
 
@@ -3007,6 +3010,12 @@ body.flow-voice-ready .flow-voice-agent {
   transform: translate3d(0, 0, 0) !important;
 }
 
+body.mobile-menu-active .flow-voice-agent {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translate3d(0, 12px, 0) !important;
+}
+
 .flow-voice-agent::before {
   content: none;
 }
@@ -3059,7 +3068,13 @@ elevenlabs-convai.flow-voice-agent {
   .flow-voice-agent {
     right: 0.75rem;
     bottom: 0.75rem;
-    max-width: calc(100vw - 1.5rem);
+    width: 96px !important;
+    height: 96px !important;
+    max-width: 96px;
+    max-height: 96px;
+    min-width: 84px;
+    min-height: 84px;
+    overflow: visible !important;
   }
 }
 

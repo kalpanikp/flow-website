@@ -299,17 +299,20 @@
       const cta = container.querySelector(".nav-cta");
       container.insertBefore(button, cta || nav);
 
-      button.addEventListener("click", () => {
-        const isOpen = header.classList.toggle("mobile-menu-open");
+      function setMenuState(isOpen) {
+        header.classList.toggle("mobile-menu-open", isOpen);
+        document.body.classList.toggle("mobile-menu-active", isOpen);
         button.setAttribute("aria-expanded", String(isOpen));
         button.setAttribute("aria-label", isOpen ? "Close site menu" : "Open site menu");
+      }
+
+      button.addEventListener("click", () => {
+        setMenuState(!header.classList.contains("mobile-menu-open"));
       });
 
       nav.querySelectorAll("a").forEach((link) => {
         link.addEventListener("click", () => {
-          header.classList.remove("mobile-menu-open");
-          button.setAttribute("aria-expanded", "false");
-          button.setAttribute("aria-label", "Open site menu");
+          setMenuState(false);
         });
       });
     });
