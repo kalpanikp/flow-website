@@ -571,7 +571,28 @@ function initSignaturePours() {
     });
 
     bottleLayers.forEach((image, imageKey) => {
-      image.classList.toggle("active", imageKey === key);
+      const isActiveLayer = imageKey === key;
+      gsap.killTweensOf(image);
+      image.classList.toggle("active", isActiveLayer);
+      image.setAttribute("aria-hidden", String(!isActiveLayer));
+
+      if (isActiveLayer) {
+        if (instant || !isMobileShowcase) {
+          gsap.set(image, {
+            opacity: 1,
+            y: isMobileShowcase ? 8 : 22,
+            scale: isMobileShowcase ? 0.92 : 0.94,
+            rotate: -1
+          });
+        }
+      } else {
+        gsap.set(image, {
+          opacity: 0,
+          y: isMobileShowcase ? 26 : 34,
+          scale: 0.9,
+          rotate: 2
+        });
+      }
     });
 
     if (withFeedback && !instant) {
@@ -579,8 +600,6 @@ function initSignaturePours() {
     }
 
     if (isMobileShowcase && hasMotionEngine) {
-      gsap.killTweensOf(nextLayer);
-
       if (instant) {
         gsap.set(nextLayer, { opacity: 1, y: 8, scale: 0.92, rotate: -1 });
         return;
@@ -617,37 +636,6 @@ function initSignaturePours() {
 
   function movePour(direction) {
     setActivePour(activeIndex + direction);
-  }
-
-  function scrollToPour(index) {
-    if (!signatureScrollTrigger) return;
-    const clampedIndex = Math.max(0, Math.min(pourKeys.length - 1, index));
-    const target = signatureScrollTrigger.start + ((signatureScrollTrigger.end - signatureScrollTrigger.start) * (clampedIndex / (pourKeys.length - 1)));
-
-    setActivePour(clampedIndex);
-    window.scrollTo({
-      top: target,
-      behavior: prefersReducedMotion ? "auto" : "smooth"
-    });
-  }
-
-  let stepScrollLocked = false;
-  let touchStartY = 0;
-
-  function handleSignatureStep(direction, event) {
-    if (!signatureScrollTrigger || !signatureScrollTrigger.isActive || Math.abs(direction) < 1) return;
-    if ((direction > 0 && activeIndex >= pourKeys.length - 1) || (direction < 0 && activeIndex <= 0)) return;
-
-    if (event && typeof event.preventDefault === "function") {
-      event.preventDefault();
-    }
-
-    if (stepScrollLocked) return;
-    stepScrollLocked = true;
-    scrollToPour(activeIndex + (direction > 0 ? 1 : -1));
-    window.setTimeout(() => {
-      stepScrollLocked = false;
-    }, window.innerWidth <= 768 ? 460 : 360);
   }
 
   function preloadPourImages() {
@@ -711,24 +699,6 @@ function initSignaturePours() {
       openActivePour();
     }
   });
-
-  stage.addEventListener("wheel", (e) => {
-    handleSignatureStep(e.deltaY, e);
-  }, { passive: false });
-
-  stage.addEventListener("touchstart", (e) => {
-    if (e.touches.length) {
-      touchStartY = e.touches[0].clientY;
-    }
-  }, { passive: true });
-
-  stage.addEventListener("touchmove", (e) => {
-    if (!e.touches.length) return;
-    const deltaY = touchStartY - e.touches[0].clientY;
-    if (Math.abs(deltaY) < 28) return;
-    handleSignatureStep(deltaY, e);
-    touchStartY = e.touches[0].clientY;
-  }, { passive: false });
 
   function startMobileRevealMotion() {
     gsap.set(".signature-copy", { opacity: 1, y: 0 });
