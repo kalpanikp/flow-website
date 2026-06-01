@@ -99,6 +99,13 @@ html.preloader-active, body.preloader-active {
   height: 100% !important;
 }
 
+html.preloader-active .main-header,
+body.preloader-active .main-header {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 /* FIXED WEBGL BACKGROUND WRAPPER */
 .webgl-bg-container {
   position: fixed;
@@ -3032,13 +3039,72 @@ a {
   transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.flow-concierge-launcher {
+  position: fixed;
+  right: clamp(0.85rem, 2vw, 1.25rem);
+  bottom: clamp(0.85rem, 2vw, 1.25rem);
+  z-index: 2147483644;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid rgba(34, 34, 34, 0.16);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(235, 196, 134, 0.28), transparent 34%),
+    rgba(246, 244, 240, 0.94);
+  color: var(--text-color);
+  box-shadow: 0 18px 44px rgba(15, 27, 41, 0.18);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 0.72rem 0.95rem;
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(0, 12px, 0);
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.flow-concierge-launcher.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0);
+}
+
+.flow-concierge-launcher[hidden] {
+  display: none !important;
+}
+
+.concierge-mark {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background: #1B1B18;
+  color: #EBC486;
+  font-family: var(--font-secondary);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.concierge-copy {
+  white-space: nowrap;
+}
+
 body.flow-voice-ready .flow-voice-agent {
   opacity: 1 !important;
   pointer-events: auto !important;
   transform: translate3d(0, 0, 0) !important;
 }
 
-body.mobile-menu-active .flow-voice-agent {
+body.mobile-menu-active .flow-voice-agent,
+body.mobile-menu-active .flow-concierge-launcher {
   opacity: 0 !important;
   pointer-events: none !important;
   transform: translate3d(0, 12px, 0) !important;
@@ -3131,6 +3197,18 @@ elevenlabs-convai.flow-voice-agent {
     min-width: 84px;
     min-height: 84px;
     overflow: visible !important;
+  }
+
+  .flow-concierge-launcher {
+    right: 0.75rem;
+    bottom: 0.75rem;
+    padding: 0.62rem 0.76rem;
+    font-size: 0.66rem;
+  }
+
+  .concierge-mark {
+    width: 2rem;
+    height: 2rem;
   }
 }
 

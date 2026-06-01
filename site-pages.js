@@ -103,11 +103,11 @@
   }
 
   function setupElevenLabsConcierge() {
-    if (byId("flow-voice-agent")) return;
+    if (byId("flow-concierge-launcher")) return;
     let mounted = false;
     let voiceWidget = null;
     let voiceReturnButton = null;
-    const engagementEvents = ["scroll", "pointerdown", "keydown", "touchstart"];
+    let launcher = null;
 
     function applyFlowConciergeBranding(widget) {
       const replacements = new Map([
@@ -181,12 +181,6 @@
       );
     }
 
-    function removeEngagementListeners() {
-      engagementEvents.forEach((eventName) => {
-        window.removeEventListener(eventName, requestMount);
-      });
-    }
-
     function hideVoiceReturnControl() {
       document.body.classList.remove("flow-voice-expanded");
     }
@@ -206,7 +200,10 @@
       }
 
       mounted = false;
-      window.setTimeout(mountConcierge, 650);
+      if (launcher) {
+        launcher.hidden = false;
+        window.requestAnimationFrame(() => launcher.classList.add("visible"));
+      }
     }
 
     function setupVoiceReturnControl(widget) {
@@ -232,9 +229,14 @@
       mounted = true;
 
       if (!canUseVoiceConcierge()) {
-        removeEngagementListeners();
         document.body.classList.add("flow-voice-unavailable");
+        mounted = false;
         return;
+      }
+
+      if (launcher) {
+        launcher.classList.remove("visible");
+        launcher.hidden = true;
       }
 
       const widget = document.createElement("elevenlabs-convai");
@@ -254,21 +256,44 @@
       applyFlowConciergeBranding(widget);
       setupVoiceReturnControl(widget);
       loadWidgetScript();
-      removeEngagementListeners();
       window.requestAnimationFrame(() => {
         document.body.classList.add("flow-voice-ready");
+        if (window.innerWidth <= 900) {
+          window.setTimeout(() => {
+            document.body.classList.add("flow-voice-expanded");
+          }, 450);
+        }
       });
     }
 
-    function requestMount() {
-      if (hasEnteredSite()) {
-        window.setTimeout(mountConcierge, 700);
-      }
+    function createLauncher() {
+      if (launcher || !hasEnteredSite()) return;
+
+      launcher = document.createElement("button");
+      launcher.type = "button";
+      launcher.id = "flow-concierge-launcher";
+      launcher.className = "flow-concierge-launcher";
+      launcher.setAttribute("aria-label", "Open Flow Concierge");
+      launcher.innerHTML = '<span class="concierge-mark">flow</span><span class="concierge-copy">Flow Concierge</span>';
+      launcher.addEventListener("click", mountConcierge);
+      document.body.appendChild(launcher);
+      window.requestAnimationFrame(() => launcher.classList.add("visible"));
     }
 
-    engagementEvents.forEach((eventName) => {
-      window.addEventListener(eventName, requestMount, { passive: true });
-    });
+    if (hasEnteredSite()) {
+      createLauncher();
+    } else {
+      const observer = new MutationObserver(() => {
+        if (hasEnteredSite()) {
+          observer.disconnect();
+          window.setTimeout(createLauncher, 500);
+        }
+      });
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+      if (document.body) {
+        observer.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+      }
+    }
   }
 
   function setupReveals() {
@@ -303,15 +328,14 @@
   });
 
   function setupMobileHeader() {
-    const mobileLinks = [
+    const navLinks = [
       ["Home", "index.html"],
       ["Brews", "beer.html"],
       ["Food", "food-menu.html"],
       ["Drinks", "drinks-menu.html"],
       ["Location", "location.html"],
       ["FAQ", "faq.html"],
-      ["Media", "media.html"],
-      ["Book a Table", "index.html#reservations"]
+      ["Media", "media.html"]
     ];
 
     document.querySelectorAll(".main-header").forEach((header) => {
@@ -322,18 +346,19 @@
       const list = nav.querySelector("ul");
       if (list && !nav.dataset.mobileLinksReady) {
         const isHomePage = window.location.pathname.endsWith("index.html") || window.location.pathname.endsWith("/");
-        const links = mobileLinks.map(([label, href]) => [
-          label,
-          label === "Book a Table" && isHomePage ? "#reservations" : href
-        ]);
 
         list.innerHTML = "";
-        links.forEach(([label, href]) => {
+        navLinks.forEach(([label, href]) => {
           const item = document.createElement("li");
-          item.className = "mobile-menu-item";
+          item.className = "nav-menu-item";
           item.innerHTML = `<a href="${href}" class="nav-link">${label}</a>`;
           list.appendChild(item);
         });
+
+        const bookItem = document.createElement("li");
+        bookItem.className = "mobile-menu-extra";
+        bookItem.innerHTML = `<a href="${isHomePage ? "#reservations" : "index.html#reservations"}" class="nav-link">Book a Table</a>`;
+        list.appendChild(bookItem);
         nav.dataset.mobileLinksReady = "true";
       }
 

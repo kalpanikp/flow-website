@@ -68,15 +68,14 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function setupMobileHeader() {
-  const mobileLinks = [
+  const navLinks = [
     ["Home", "index.html"],
     ["Brews", "beer.html"],
     ["Food", "food-menu.html"],
     ["Drinks", "drinks-menu.html"],
     ["Location", "location.html"],
     ["FAQ", "faq.html"],
-    ["Media", "media.html"],
-    ["Book a Table", "index.html#reservations"]
+    ["Media", "media.html"]
   ];
 
   document.querySelectorAll(".main-header").forEach((header) => {
@@ -87,18 +86,19 @@ function setupMobileHeader() {
     const list = nav.querySelector("ul");
     if (list && !nav.dataset.mobileLinksReady) {
       const isHomePage = window.location.pathname.endsWith("index.html") || window.location.pathname.endsWith("/");
-      const links = mobileLinks.map(([label, href]) => [
-        label,
-        label === "Book a Table" && isHomePage ? "#reservations" : href
-      ]);
 
       list.innerHTML = "";
-      links.forEach(([label, href]) => {
+      navLinks.forEach(([label, href]) => {
         const item = document.createElement("li");
-        item.className = "mobile-menu-item";
+        item.className = "nav-menu-item";
         item.innerHTML = `<a href="${href}" class="nav-link">${label}</a>`;
         list.appendChild(item);
       });
+
+      const bookItem = document.createElement("li");
+      bookItem.className = "mobile-menu-extra";
+      bookItem.innerHTML = `<a href="${isHomePage ? "#reservations" : "index.html#reservations"}" class="nav-link">Book a Table</a>`;
+      list.appendChild(bookItem);
       nav.dataset.mobileLinksReady = "true";
     }
 
