@@ -1782,6 +1782,10 @@ a {
   pointer-events: auto;
 }
 
+.drawer-mobile-back {
+  display: none;
+}
+
 .drawer-panel {
   position: absolute;
   top: 0;
@@ -1800,7 +1804,7 @@ a {
 @media (max-width: 600px) {
   .drawer-panel {
     width: 100%;
-    padding: 3rem 2rem;
+    padding: calc(env(safe-area-inset-top, 0px) + 0.8rem) 1.15rem 2rem;
   }
 }
 
@@ -1812,17 +1816,110 @@ a {
   position: absolute;
   top: 2rem;
   right: 2.5rem;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 2.5rem;
   font-weight: 300;
   background: none;
   border: none;
   cursor: pointer;
   color: var(--text-color);
+  line-height: 1;
   transition: transform var(--transition-fast);
 }
 
 .drawer-close:hover {
   transform: rotate(90deg) scale(1.15);
+}
+
+.drawer-close-label {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .beer-drawer-overlay {
+    z-index: 2147483646;
+  }
+
+  .drawer-mobile-back {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 5.65rem);
+    left: 1rem;
+    z-index: 2147483647;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0 1rem;
+    border: 1px solid rgba(34, 34, 34, 0.2);
+    border-radius: 999px;
+    background: rgba(246, 244, 240, 0.98);
+    color: var(--text-color);
+    box-shadow: 0 12px 30px rgba(15, 27, 41, 0.18);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .drawer-mobile-back span:first-child {
+    font-family: var(--font-body);
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 0.8;
+  }
+
+  .drawer-close {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 0.85rem);
+    right: calc(env(safe-area-inset-right, 0px) + 0.85rem);
+    z-index: 2147483647;
+    width: auto;
+    min-width: 5.35rem;
+    height: 3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.42rem;
+    padding: 0 0.95rem;
+    border: 1px solid rgba(34, 34, 34, 0.18);
+    border-radius: 999px;
+    background: rgba(246, 244, 240, 0.96);
+    box-shadow: 0 10px 26px rgba(15, 27, 41, 0.16);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    font-size: 1.45rem;
+    line-height: 1;
+  }
+
+  .drawer-close-label {
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .drawer-close:hover {
+    transform: none;
+  }
+
+  body.beer-detail-active .flow-concierge-launcher,
+  body.beer-detail-active .flow-voice-agent,
+  body.beer-detail-active .voice-return-button {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translate3d(0, 18px, 0) !important;
+  }
 }
 
 .drawer-body {
@@ -3004,6 +3101,11 @@ a {
   padding: 1rem;
   font-family: var(--font-body);
   color: var(--text-color);
+}
+
+.reservation-form button:disabled {
+  cursor: wait;
+  opacity: 0.72;
 }
 
 .map-frame {

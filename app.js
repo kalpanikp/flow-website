@@ -954,6 +954,7 @@ function openBeerDrawerByKey(beerKey) {
   document.getElementById("drawer-beer-pairings").textContent = data.pairings;
 
   drawer.classList.add("open");
+  document.body.classList.add("beer-detail-active");
   drawer.setAttribute("aria-hidden", "false");
   if (closeBtn) closeBtn.focus();
 }
@@ -963,17 +964,17 @@ function setupBeerDrawerControls() {
   window.__flowDrawerControlsReady = true;
 
   const drawer = document.getElementById("beer-drawer");
-  const closeBtn = document.getElementById("drawer-close-btn");
   if (!drawer) return;
 
   const closeDrawer = () => {
     drawer.classList.remove("open");
+    document.body.classList.remove("beer-detail-active");
     drawer.setAttribute("aria-hidden", "true");
   };
 
-  if (closeBtn) {
-    closeBtn.addEventListener("click", closeDrawer);
-  }
+  drawer.querySelectorAll("[data-drawer-close]").forEach((button) => {
+    button.addEventListener("click", closeDrawer);
+  });
 
   drawer.addEventListener("click", (event) => {
     if (event.target === drawer) {
@@ -1369,12 +1370,14 @@ function initBrewsPedestals() {
     document.getElementById("drawer-beer-pairings").textContent = data.pairings;
 
     drawer.classList.add("open");
+    document.body.classList.add("beer-detail-active");
     drawer.setAttribute("aria-hidden", "false");
-    closeBtn.focus();
+    if (closeBtn) closeBtn.focus();
   }
 
   function closeDrawer() {
     drawer.classList.remove("open");
+    document.body.classList.remove("beer-detail-active");
     drawer.setAttribute("aria-hidden", "true");
     if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
       lastFocusedElement.focus();
@@ -1424,8 +1427,8 @@ function initBrewsPedestals() {
     });
   });
 
-  closeBtn.addEventListener("click", () => {
-    closeDrawer();
+  drawer.querySelectorAll("[data-drawer-close]").forEach((button) => {
+    button.addEventListener("click", closeDrawer);
   });
 
   drawer.addEventListener("click", (e) => {
@@ -1519,7 +1522,11 @@ function initSmoothAnchors() {
       
       if (targetElement) {
         const drawer = document.getElementById("beer-drawer");
-        if (drawer) drawer.classList.remove("open");
+        if (drawer) {
+          drawer.classList.remove("open");
+          document.body.classList.remove("beer-detail-active");
+          drawer.setAttribute("aria-hidden", "true");
+        }
 
         const headerOffset = 90;
         const elementPosition = targetElement.getBoundingClientRect().top;

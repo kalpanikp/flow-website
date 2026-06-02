@@ -83,22 +83,116 @@
     track.innerHTML = copy + copy;
   }
 
+  function getReservationEndpoint() {
+    const metaEndpoint = document.querySelector('meta[name="flow-reservation-endpoint"]');
+    return (
+      window.FLOW_RESERVATION_ENDPOINT ||
+      (metaEndpoint && metaEndpoint.getAttribute("content")) ||
+      ""
+    ).trim();
+  }
+
+  function getReservationAuthHeaders() {
+    const metaAnonKey = document.querySelector('meta[name="flow-supabase-anon-key"]');
+    const anonKey = (
+      window.FLOW_SUPABASE_ANON_KEY ||
+      (metaAnonKey && metaAnonKey.getAttribute("content")) ||
+      ""
+    ).trim();
+
+    return anonKey
+      ? { apikey: anonKey, Authorization: `Bearer ${anonKey}` }
+      : {};
+  }
+
+  function buildReservationPayload(form) {
+    const formData = new FormData(form);
+    const details = Object.fromEntries(formData.entries());
+
+    return {
+      name: String(details.name || "").trim(),
+      phone: String(details.phone || "").trim(),
+      guests: Number(details.guests || 0),
+      reservation_date: String(details.reservation_date || details.date || "").trim(),
+      reservation_time: String(details.reservation_time || details.time || "").trim(),
+      special_notes: String(details.special_notes || details.notes || "").trim(),
+    };
+  }
+
+  function validateReservationPayload(payload) {
+    if (!payload.name) return "Please enter your name.";
+    if (!payload.phone) return "Please enter your phone number.";
+    if (!Number.isInteger(payload.guests) || payload.guests < 1) return "Please enter the number of guests.";
+    if (!payload.reservation_date) return "Please select a reservation date.";
+    if (!payload.reservation_time) return "Please select a reservation time.";
+    return "";
+  }
+
   function setupReservation() {
     const form = byId("reservation-form");
     const status = byId("reservation-status");
     if (!form) return;
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      const formData = new FormData(form);
-      const details = Object.fromEntries(formData.entries());
-      const message = `Reservation request: ${details.name || "Guest"}, ${details.guests || "2"} guests, ${details.date || "date pending"} at ${details.time || "time pending"}. Phone: ${details.phone || "not provided"}. ${details.notes || ""}`;
-      const encoded = encodeURIComponent(message);
-      const mailto = `mailto:reservations@flowbrew.in?subject=Flow reservation request&body=${encoded}`;
+      const endpoint = getReservationEndpoint();
+      const payload = buildReservationPayload(form);
+      const validationError = validateReservationPayload(payload);
+      const submitButton = form.querySelector('button[type="submit"]');
+
       if (status) {
-        status.textContent = "Request prepared. Your email app will open so the restaurant receives the details.";
+        status.textContent = "";
       }
-      window.location.href = mailto;
+
+      if (validationError) {
+        if (status) status.textContent = validationError;
+        return;
+      }
+
+      if (!endpoint) {
+        if (status) {
+          status.textContent = "Online reservations are being connected. Please call Flow directly for now: +91 98991 99138.";
+        }
+        return;
+      }
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Sending...";
+      }
+
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...getReservationAuthHeaders(),
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok || result.success === false) {
+          throw new Error(result.error || "Reservation request failed");
+        }
+
+        form.reset();
+        if (status) {
+          status.textContent = "Reservation request sent. The Flow team will confirm your table shortly.";
+        }
+      } catch (error) {
+        if (status) {
+          status.textContent = error instanceof Error
+            ? `Could not send reservation: ${error.message}`
+            : "Could not send reservation. Please call Flow directly.";
+        }
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = "Send Request";
+        }
+      }
     });
   }
 
