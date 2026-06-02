@@ -884,7 +884,7 @@ const BEER_DATA = {
     img: "Public/Beer Image/Mango Lager.webp"
   },
   joey: {
-    name: "Knight Rider",
+    name: "Flowy Joey",
     style: "Munich Helles",
     abv: "5.5%",
     ibu: "25",
@@ -894,8 +894,8 @@ const BEER_DATA = {
     img: "Public/Beer Image/Flowy Joey.webp"
   },
   neipa: {
-    name: "Flowy Joey",
-    style: "NEIPA / Hazy Pale Ale",
+    name: "NEIPA",
+    style: "New England India Pale Ale",
     abv: "6%",
     ibu: "NA",
     temp: "7-9°C",
@@ -904,7 +904,7 @@ const BEER_DATA = {
     img: "Public/Beer Image/Neipa.webp"
   },
   stout: {
-    name: "Oatmeal Stout",
+    name: "Knight Rider",
     style: "Nitro Oatmeal Stout",
     abv: "6.0%",
     ibu: "30",

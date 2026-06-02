@@ -31,9 +31,9 @@ window.FLOW_SITE_DATA = {
     },
     {
       key: "neipa",
-      name: "Flowy Joey",
+      name: "NEIPA",
       displayName: "NEIPA",
-      style: "Hazy Pale Ale",
+      style: "New England India Pale Ale",
       abv: "6%",
       ibu: "NA",
       price: "330ml 455 / 500ml 655 / 1.5L 1775",
@@ -43,7 +43,7 @@ window.FLOW_SITE_DATA = {
     },
     {
       key: "helles",
-      name: "Knight Rider",
+      name: "Flowy Joey",
       displayName: "Munich Helles",
       style: "UK Style Munich Helles",
       abv: "5.5%",
@@ -67,7 +67,7 @@ window.FLOW_SITE_DATA = {
     },
     {
       key: "stout",
-      name: "Oatmeal Stout",
+      name: "Knight Rider",
       displayName: "Oatmeal Stout",
       style: "Nitro Oatmeal Stout",
       abv: "6.0%",
