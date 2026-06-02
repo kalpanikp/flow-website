@@ -14,8 +14,8 @@ window.FLOW_SITE_DATA = {
       ibu: "12",
       price: "330ml 425 / 500ml 625 / 1.5L 1645",
       img: "Public/Beer Image/Belgian Wheat.webp",
-      desc: "Pale and cloudy with orange peel, spice, coriander and chamomile. A citrus-finished, curiously refreshing brew.",
-      pairing: "Citrus-led plates, prawns, salads and soft cheeses."
+      desc: "Pale, cloudy and gently spiced with orange peel, coriander and chamomile. Bright carbonation and a citrus finish make it crisp, aromatic and refreshing.",
+      pairing: "Tandoori Prawns, Fish Tikka, Avo & Beet, and Crunchy Thai Tofu Bao."
     },
     {
       key: "german",
@@ -26,8 +26,8 @@ window.FLOW_SITE_DATA = {
       ibu: "10",
       price: "330ml 455 / 500ml 655 / 1.5L 1775",
       img: "Public/Beer Image/German Wheat.webp",
-      desc: "A Bavarian-style wheat beer with a naturally cloudy pour, silky mouthfeel and lively banana-clove aromas.",
-      pairing: "Pretzels, sausages, roast chicken and apple desserts."
+      desc: "A classic Bavarian-style wheat beer with a naturally cloudy pour, silky mouthfeel and lively banana-clove aromatics. Light, effervescent and easy to sip.",
+      pairing: "Black & White Charred Chicken, Basil Chicken Sui Mai, Podi Idli Fries, and Apple & Cheese."
     },
     {
       key: "neipa",
@@ -38,8 +38,8 @@ window.FLOW_SITE_DATA = {
       ibu: "NA",
       price: "330ml 455 / 500ml 655 / 1.5L 1775",
       img: "Public/Beer Image/Neipa.webp",
-      desc: "Juicy, hazy and smooth IPA bursting with tropical fruit aromas and citrusy hop flavour. Low on bitterness, high on haze.",
-      pairing: "Spiced tacos, ribs, bold sandwiches and blue cheese."
+      desc: "Juicy, hazy and smooth, with tropical fruit aromas and citrusy hop flavour. Low perceived bitterness, high haze and a soft finish.",
+      pairing: "Pork Charsui Bao, Korean Fried Chicken, Baja Fish Tacos, and Queso & Avo Mole."
     },
     {
       key: "helles",
@@ -50,8 +50,8 @@ window.FLOW_SITE_DATA = {
       ibu: "25",
       price: "330ml 455 / 500ml 655 / 1.5L 1775",
       img: "Public/Beer Image/Flowy Joey.webp",
-      desc: "A pale German-style lager known for smooth malt flavour, subtle hop character and easy-drinking balance.",
-      pairing: "Burgers, fries, grilled chicken and pizzas."
+      desc: "A pale German-style lager with smooth malt flavour, subtle hop character and a clean, easy-drinking finish.",
+      pairing: "Beer Battered Fish & Chips, Margherita, Naples Style Garlic Bread, and Parmesan Truffle Fries."
     },
     {
       key: "mango",
@@ -62,8 +62,8 @@ window.FLOW_SITE_DATA = {
       ibu: "12",
       price: "330ml 455 / 500ml 655 / 1.5L 1775",
       img: "Public/Beer Image/Mango Lager.webp",
-      desc: "A refreshing lager with bread malt body, mild tropical hops and juicy Alphonso mango character.",
-      pairing: "Asian curries, chilli-forward bites and grilled seafood."
+      desc: "A refreshing lager with bread-malt body, mild tropical hops and juicy Alphonso mango character, finished with a gentle chilli lift.",
+      pairing: "Korean Fried Chicken, Sri Lankan Style Devilled Paneer, Thai Curry, and Tandoori Prawns."
     },
     {
       key: "stout",
@@ -75,19 +75,19 @@ window.FLOW_SITE_DATA = {
       price: "330ml 455 / 500ml 655 / 1.5L 1775",
       img: "Public/Beer Image/Oatmeal Stout.webp",
       desc: "Rich and velvety stout poured on nitro with a cascading head, roasted malts, subtle chocolate and a silky finish.",
-      pairing: "Steaks, chocolate desserts, coffee and roasted nuts."
+      pairing: "Tenderloin Steak, Slow Braised BBQ Pork Belly, Baked Chocolate Cheesecake, and Irish Coffee Cheesecake."
     },
     {
       key: "cider",
-      name: "Captain Bubbles",
-      displayName: "Champagne Like Cider",
+      name: "Champagne Like Cider",
+      displayName: "Apple Cider",
       style: "Apple Cider",
       abv: "6%",
       ibu: "NA",
       price: "330ml 455 / 500ml 655 / 1.5L 1775",
       img: "Public/Beer Image/Apple Cider.webp",
       desc: "Clean, crisp hard cider with amber appearance, tangy-tart sweetness and fruity aroma from pressed Kashmiri apples.",
-      pairing: "Pork, creamy pasta, brie and cinnamon desserts."
+      pairing: "Pork Charsui Bao, Caper Butter Grilled Fish, Pesto Burrata, and Apple & Cheese."
     },
     {
       key: "mead",
@@ -99,7 +99,7 @@ window.FLOW_SITE_DATA = {
       price: "330ml 455 / 500ml 655 / 1.5L 1775",
       img: "Public/Beer Image/Honey Mead.webp",
       desc: "A honey-led drink with earthy ginger warmth and sweet fruity notes of honey and peach.",
-      pairing: "Tandoori platters, dry-fruit desserts and charcuterie."
+      pairing: "Seekh Kebab Platter, Rose Harissa Paneer Tikka, Blue Cheese Naan, and Classic Tiramisu."
     }
   ],
   food: [
