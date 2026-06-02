@@ -216,11 +216,9 @@
       document.body.appendChild(voiceReturnButton);
 
       widget.addEventListener("pointerdown", () => {
-        if (window.innerWidth <= 900) {
-          window.setTimeout(() => {
-            document.body.classList.add("flow-voice-expanded");
-          }, 300);
-        }
+        window.setTimeout(() => {
+          document.body.classList.add("flow-voice-expanded");
+        }, 300);
       });
     }
 
@@ -258,11 +256,9 @@
       loadWidgetScript();
       window.requestAnimationFrame(() => {
         document.body.classList.add("flow-voice-ready");
-        if (window.innerWidth <= 900) {
-          window.setTimeout(() => {
-            document.body.classList.add("flow-voice-expanded");
-          }, 450);
-        }
+        window.setTimeout(() => {
+          document.body.classList.add("flow-voice-expanded");
+        }, 450);
       });
     }
 
@@ -274,7 +270,11 @@
       launcher.id = "flow-concierge-launcher";
       launcher.className = "flow-concierge-launcher";
       launcher.setAttribute("aria-label", "Open Flow Concierge");
-      launcher.innerHTML = '<span class="concierge-mark">flow</span><span class="concierge-copy">Flow Concierge</span>';
+      launcher.innerHTML = '<span class="concierge-mark" aria-hidden="true">FC</span><span class="concierge-copy">Flow Concierge</span>';
+      launcher.style.position = "fixed";
+      launcher.style.right = "0.85rem";
+      launcher.style.bottom = "0.85rem";
+      launcher.style.zIndex = "2147483644";
       launcher.addEventListener("click", mountConcierge);
       document.body.appendChild(launcher);
       window.requestAnimationFrame(() => launcher.classList.add("visible"));

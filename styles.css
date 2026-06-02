@@ -100,10 +100,12 @@ html.preloader-active, body.preloader-active {
 }
 
 html.preloader-active .main-header,
-body.preloader-active .main-header {
+body.preloader-active .main-header,
+body.age-gate-active .main-header {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
+  transform: translateY(-120%) !important;
 }
 
 /* FIXED WEBGL BACKGROUND WRAPPER */
@@ -3040,11 +3042,11 @@ a {
 }
 
 .flow-concierge-launcher {
-  position: fixed;
-  right: clamp(0.85rem, 2vw, 1.25rem);
-  bottom: clamp(0.85rem, 2vw, 1.25rem);
-  z-index: 2147483644;
-  display: inline-flex;
+  position: fixed !important;
+  right: clamp(0.85rem, 2vw, 1.25rem) !important;
+  bottom: clamp(0.85rem, 2vw, 1.25rem) !important;
+  z-index: 2147483644 !important;
+  display: inline-flex !important;
   align-items: center;
   gap: 0.65rem;
   border: 1px solid rgba(34, 34, 34, 0.16);
@@ -3063,6 +3065,7 @@ a {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
+  min-width: 0;
   opacity: 0;
   pointer-events: none;
   transform: translate3d(0, 12px, 0);
@@ -3200,15 +3203,17 @@ elevenlabs-convai.flow-voice-agent {
   }
 
   .flow-concierge-launcher {
-    right: 0.75rem;
-    bottom: 0.75rem;
-    padding: 0.62rem 0.76rem;
-    font-size: 0.66rem;
+    right: 1rem !important;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem) !important;
+    padding: 0.74rem 0.92rem;
+    font-size: 0.72rem;
+    gap: 0.6rem;
+    box-shadow: 0 18px 48px rgba(15, 27, 41, 0.24);
   }
 
   .concierge-mark {
-    width: 2rem;
-    height: 2rem;
+    width: 2.25rem;
+    height: 2.25rem;
   }
 }
 

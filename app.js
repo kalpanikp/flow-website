@@ -143,6 +143,7 @@ function initStaticFallback() {
   if (preloader) preloader.style.display = "none";
   document.documentElement.classList.remove("preloader-active");
   document.body.classList.remove("preloader-active");
+  document.body.classList.remove("age-gate-active");
   document.querySelectorAll(".hero-subtitle, .hero-title, .hero-desc, .hero-scroll-indicator").forEach((el) => {
     el.style.opacity = "1";
     el.style.transform = "none";
@@ -304,6 +305,7 @@ function playPreloaderExit() {
       preloader.style.display = "none";
       document.documentElement.classList.remove("preloader-active");
       document.body.classList.remove("preloader-active");
+      document.body.classList.remove("age-gate-active");
     }
   });
 
