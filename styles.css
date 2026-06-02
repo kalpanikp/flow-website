@@ -2693,6 +2693,9 @@ a {
 }
 
 .social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
   font-family: var(--font-ui);
   font-size: 0.9rem;
   font-weight: 600;
@@ -2701,6 +2704,18 @@ a {
   text-transform: uppercase;
   width: max-content;
   position: relative;
+}
+
+.social-icon {
+  width: 1.05rem;
+  height: 1.05rem;
+  fill: none;
+  stroke: var(--gold-color);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 auto;
+  transform: translateY(-1px);
 }
 
 .social-link::after {
