@@ -45,7 +45,7 @@ window.FLOW_SITE_DATA = {
       key: "helles",
       name: "Flowy Joey",
       displayName: "Munich Helles",
-      style: "UK Style Munich Helles",
+      style: "German Style Munich Helles",
       abv: "5.5%",
       ibu: "25",
       price: "330ml 455 / 500ml 655 / 1.5L 1775",

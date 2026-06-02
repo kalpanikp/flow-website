@@ -885,7 +885,7 @@ const BEER_DATA = {
   },
   joey: {
     name: "Flowy Joey",
-    style: "Munich Helles",
+    style: "German Style Munich Helles",
     abv: "5.5%",
     ibu: "25",
     temp: "6-8°C",
