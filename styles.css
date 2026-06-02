@@ -382,7 +382,7 @@ a {
   left: 0;
   width: 100%;
   z-index: 1000;
-  padding: 1.5rem 0;
+  padding: 0.85rem 0;
   background-color: rgba(246, 244, 240, 0.85);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
@@ -403,7 +403,7 @@ a {
 .logo-link {
   display: flex;
   align-items: center;
-  height: 58px;
+  height: 46px;
 }
 
 .logo-img {
@@ -678,15 +678,16 @@ a {
   z-index: 30;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.35rem;
 }
 
-.hero-subtitle {
-  font-family: var(--font-ui);
-  font-size: 0.9rem;
-  letter-spacing: 0.3em;
-  font-weight: 600;
-  color: var(--gold-color);
+.hero-typography::before {
+  content: "";
+  position: absolute;
+  inset: -3rem -3.5rem -3rem -4rem;
+  z-index: -1;
+  background: radial-gradient(ellipse at 32% 50%, rgba(246, 244, 240, 0.86) 0%, rgba(246, 244, 240, 0.58) 38%, rgba(246, 244, 240, 0) 72%);
+  pointer-events: none;
 }
 
 .hero-title {
@@ -761,7 +762,9 @@ a {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 75% 50%, rgba(246, 244, 240, 0) 15%, rgba(246, 244, 240, 0.78) 75%);
+  background:
+    linear-gradient(90deg, rgba(246, 244, 240, 0.42) 0%, rgba(246, 244, 240, 0.2) 28%, rgba(246, 244, 240, 0) 54%),
+    radial-gradient(circle at 75% 50%, rgba(246, 244, 240, 0) 18%, rgba(246, 244, 240, 0.34) 78%);
   pointer-events: none;
   z-index: 2;
 }
@@ -789,7 +792,8 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover; /* Cover entire viewport beautifully across all device form factors */
-  opacity: 0.88; /* Blends sequence tones elegantly with brand background color */
+  opacity: 1;
+  filter: saturate(1.14) contrast(1.08) brightness(1.03);
 }
 
 .floating-ingredient {
@@ -3369,7 +3373,6 @@ elevenlabs-convai.flow-voice-agent {
     min-height: 100vh;
   }
 
-  .hero-subtitle,
   .hero-title,
   .hero-desc,
   .hero-scroll-indicator,

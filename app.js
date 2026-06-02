@@ -144,7 +144,7 @@ function initStaticFallback() {
   document.documentElement.classList.remove("preloader-active");
   document.body.classList.remove("preloader-active");
   document.body.classList.remove("age-gate-active");
-  document.querySelectorAll(".hero-subtitle, .hero-title, .hero-desc, .hero-scroll-indicator").forEach((el) => {
+  document.querySelectorAll(".hero-title, .hero-desc, .hero-scroll-indicator").forEach((el) => {
     el.style.opacity = "1";
     el.style.transform = "none";
   });
@@ -381,21 +381,19 @@ function initHeroParallax() {
   // Choreographed across the master scroll: fades in (0%-30%), holds, and fades out cleanly (70%-100%) to clear the viewport for the next section.
   
   // Set initial hidden states
-  gsap.set([".hero-subtitle", ".hero-title", ".hero-desc", ".hero-scroll-indicator"], {
+  gsap.set([".hero-title", ".hero-desc", ".hero-scroll-indicator"], {
     opacity: 0,
     y: 35
   });
 
   // Fade-in Sequence (0% to 30% progress of the scrub)
   driftTimeline
-    .to(".hero-subtitle", { opacity: 1, y: 0, duration: 0.15, ease: "power2.out" }, 0)
-    .to(".hero-title", { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }, 0.03)
+    .to(".hero-title", { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }, 0.02)
     .to(".hero-desc", { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }, 0.06)
-    .to(".hero-scroll-indicator", { opacity: 1, y: 0, duration: 0.12, ease: "power2.out" }, 0.09);
+    .to(".hero-scroll-indicator", { opacity: 1, y: 0, duration: 0.12, ease: "power2.out" }, 0.1);
 
   // Fade-out Exit Sequence (70% to 100% progress of the scrub)
   driftTimeline
-    .to(".hero-subtitle", { opacity: 0, y: -25, duration: 0.15, ease: "power2.in" }, 0.7)
     .to(".hero-title", { opacity: 0, y: -40, duration: 0.2, ease: "power2.in" }, 0.73)
     .to(".hero-desc", { opacity: 0, y: -25, duration: 0.2, ease: "power2.in" }, 0.76)
     .to(".hero-scroll-indicator", { opacity: 0, y: -15, duration: 0.12, ease: "power2.in" }, 0.79);
