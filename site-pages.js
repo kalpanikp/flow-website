@@ -44,11 +44,11 @@
     target.innerHTML = data.beers.map((beer) => `
       <article class="beer-page-card reveal-on-scroll">
         <div class="beer-page-media">
-          <img src="${beer.img}" alt="${beer.displayName} at Flow Brew & Dine" loading="lazy" decoding="async">
+          <img src="${beer.img}" alt="${beer.name} ${beer.style} at Flow Brew & Dine" loading="lazy" decoding="async">
         </div>
         <div class="beer-page-copy">
-          <span class="section-tag">${beer.name}</span>
-          <h2 class="font-playfair">${beer.displayName}</h2>
+          <span class="section-tag">${beer.style}</span>
+          <h2 class="font-playfair">${beer.name}</h2>
           <p>${beer.desc}</p>
           <dl>
             <div><dt>Style</dt><dd>${beer.style}</dd></div>
