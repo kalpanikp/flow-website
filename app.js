@@ -15,6 +15,37 @@ let logotypeDrawn = false;
 let preloaderExitPlayed = false;
 window.flowFeedbackEnabled = true;
 let flowTickAudioCtx = null;
+const FLOW_SESSION_AGE_KEY = "flowAgeVerifiedSession";
+
+function isAgeVerifiedForSession() {
+  try {
+    return sessionStorage.getItem(FLOW_SESSION_AGE_KEY) === "true";
+  } catch (error) {
+    return false;
+  }
+}
+
+function markAgeVerifiedForSession() {
+  try {
+    sessionStorage.setItem(FLOW_SESSION_AGE_KEY, "true");
+  } catch (error) {}
+}
+
+function skipPreloaderForVerifiedSession() {
+  sequenceCached = true;
+  logotypeDrawn = true;
+  preloaderExitPlayed = true;
+
+  const preloader = document.getElementById("preloader");
+  if (preloader) {
+    preloader.style.display = "none";
+  }
+
+  document.documentElement.classList.remove("preloader-active");
+  document.documentElement.classList.add("age-session-verified");
+  document.body.classList.remove("preloader-active");
+  document.body.classList.remove("age-gate-active");
+}
 
 function playFlowTickFeedback() {
   if (!window.flowFeedbackEnabled) return;
@@ -55,7 +86,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  initPreloader();
+  if (isAgeVerifiedForSession()) {
+    skipPreloaderForVerifiedSession();
+  } else {
+    initPreloader();
+  }
   initHeroParallax();
   initHeroSequence();
   initEssenceAnimations();
@@ -197,6 +232,8 @@ function initPreloader() {
 
 // Check if both cursive drawing and sequence caching are done, then show age verification
 function checkReadyToExit() {
+  if (preloaderExitPlayed || isAgeVerifiedForSession()) return;
+
   if (sequenceCached && logotypeDrawn) {
     showAgeVerification();
   }
@@ -256,6 +293,7 @@ function showAgeVerification() {
       // Legal age check (21 or older)
       if (age >= 21) {
         if (errorMsg) errorMsg.style.display = "none";
+        markAgeVerifiedForSession();
         
         // Play click sound using bezel synthesizer
         try {

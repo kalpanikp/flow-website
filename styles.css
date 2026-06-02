@@ -108,6 +108,23 @@ body.age-gate-active .main-header {
   transform: translateY(-120%) !important;
 }
 
+html.age-session-verified,
+html.age-session-verified body {
+  overflow: auto !important;
+  height: auto !important;
+}
+
+html.age-session-verified .main-header {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+
+html.age-session-verified #preloader {
+  display: none !important;
+}
+
 /* FIXED WEBGL BACKGROUND WRAPPER */
 .webgl-bg-container {
   position: fixed;
