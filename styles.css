@@ -1386,9 +1386,11 @@ a {
   }
 
   .signature-shadow {
-    bottom: 4%;
-    width: min(38vw, 160px);
-    height: 20px;
+    bottom: -2%;
+    width: min(44vw, 178px);
+    height: 16px;
+    transform: translateY(32px);
+    opacity: 0.72;
   }
 
   .signature-info-stack {
@@ -1474,6 +1476,13 @@ a {
 
   .signature-product-visual {
     min-height: min(36svh, 285px);
+  }
+
+  .signature-shadow {
+    bottom: -4%;
+    width: min(48vw, 170px);
+    height: 14px;
+    transform: translateY(34px);
   }
 
   .signature-info-stack {
