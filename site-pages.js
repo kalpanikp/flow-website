@@ -337,11 +337,14 @@
       widget.setAttribute("aria-label", "Flow Concierge voice agent");
       widget.setAttribute("agent-id", "agent_0401kt1jdzr0epdryce575wve93t");
       widget.setAttribute("action-text", "What's on tap?");
-      widget.setAttribute("expand-text", "Talk to Flow Concierge");
+      widget.setAttribute("expand-text", "Chat with Flow Concierge");
       widget.setAttribute("start-call-text", "Find your perfect pour");
       widget.setAttribute("end-call-text", "End call");
       widget.setAttribute("listening-text", "Flow Concierge is listening...");
       widget.setAttribute("speaking-text", "Flow Concierge is speaking...");
+      widget.setAttribute("transcript", "true");
+      widget.setAttribute("text-input", "true");
+      widget.setAttribute("default-expanded", "true");
 
       document.body.appendChild(widget);
       voiceWidget = widget;
@@ -350,9 +353,6 @@
       loadWidgetScript();
       window.requestAnimationFrame(() => {
         document.body.classList.add("flow-voice-ready");
-        window.setTimeout(() => {
-          document.body.classList.add("flow-voice-expanded");
-        }, 450);
       });
     }
 
