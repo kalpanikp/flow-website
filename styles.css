@@ -1202,13 +1202,14 @@ a {
 
 .signature-shadow {
   position: absolute;
-  z-index: 1;
-  bottom: 8%;
+  z-index: 0;
+  left: 50%;
+  bottom: 3%;
   width: 210px;
   height: 28px;
-  transform: translateY(20px);
+  transform: translate(-50%, 34px);
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(15, 27, 41, 0.28), rgba(15, 27, 41, 0));
+  background: radial-gradient(ellipse at center, rgba(15, 27, 41, 0.2), rgba(15, 27, 41, 0));
   pointer-events: none;
 }
 
@@ -1363,7 +1364,7 @@ a {
   }
 
   .signature-product-visual {
-    min-height: min(38svh, 350px);
+    min-height: min(40svh, 370px);
     touch-action: pan-y;
     transform: translateZ(0);
     will-change: transform;
@@ -1386,19 +1387,19 @@ a {
   }
 
   .signature-shadow {
-    bottom: -2%;
-    width: min(44vw, 178px);
-    height: 16px;
-    transform: translateY(32px);
-    opacity: 0.72;
+    bottom: 0;
+    width: min(48vw, 190px);
+    height: 14px;
+    transform: translate(-50%, 42px);
+    opacity: 0.58;
   }
 
   .signature-info-stack {
-    min-height: min(28svh, 250px);
+    min-height: 270px;
     max-width: 560px;
     width: 100%;
     margin: 0 auto;
-    overflow: hidden;
+    overflow: visible;
     touch-action: pan-y;
   }
 
@@ -1427,6 +1428,10 @@ a {
 
   .signature-info-card dl div {
     padding-top: 0.55rem;
+  }
+
+  .signature-info-card dl div:last-child {
+    grid-column: 1 / -1;
   }
 
   .signature-explore-link {
@@ -1475,18 +1480,18 @@ a {
   }
 
   .signature-product-visual {
-    min-height: min(36svh, 285px);
+    min-height: min(39svh, 315px);
   }
 
   .signature-shadow {
-    bottom: -4%;
-    width: min(48vw, 170px);
-    height: 14px;
-    transform: translateY(34px);
+    bottom: 0;
+    width: min(52vw, 180px);
+    height: 12px;
+    transform: translate(-50%, 44px);
   }
 
   .signature-info-stack {
-    min-height: min(27svh, 210px);
+    min-height: 275px;
   }
 
   .signature-info-card h3 {
