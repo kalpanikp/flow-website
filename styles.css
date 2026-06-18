@@ -1202,14 +1202,13 @@ a {
 
 .signature-shadow {
   position: absolute;
-  z-index: 0;
-  left: 50%;
-  bottom: 3%;
+  z-index: 1;
+  bottom: 8%;
   width: 210px;
   height: 28px;
-  transform: translate(-50%, 34px);
+  transform: translateY(20px);
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(15, 27, 41, 0.2), rgba(15, 27, 41, 0));
+  background: radial-gradient(ellipse at center, rgba(15, 27, 41, 0.28), rgba(15, 27, 41, 0));
   pointer-events: none;
 }
 
@@ -1364,7 +1363,9 @@ a {
   }
 
   .signature-product-visual {
-    min-height: min(40svh, 370px);
+    --mobile-shadow-gap: clamp(42px, 7.5vh, 68px);
+    min-height: min(43svh, 390px);
+    padding-bottom: var(--mobile-shadow-gap);
     touch-action: pan-y;
     transform: translateZ(0);
     will-change: transform;
@@ -1387,11 +1388,14 @@ a {
   }
 
   .signature-shadow {
-    bottom: 0;
-    width: min(48vw, 190px);
-    height: 14px;
-    transform: translate(-50%, 42px);
-    opacity: 0.58;
+    z-index: 0;
+    left: 50%;
+    bottom: calc(var(--mobile-shadow-gap) * 0.18);
+    width: min(46vw, 184px);
+    height: 12px;
+    transform: translate(-50%, 0);
+    opacity: 0.52;
+    background: radial-gradient(ellipse at center, rgba(15, 27, 41, 0.18), rgba(15, 27, 41, 0) 72%);
   }
 
   .signature-info-stack {
@@ -1480,14 +1484,15 @@ a {
   }
 
   .signature-product-visual {
-    min-height: min(39svh, 315px);
+    --mobile-shadow-gap: 58px;
+    min-height: min(42svh, 330px);
+    padding-bottom: var(--mobile-shadow-gap);
   }
 
   .signature-shadow {
-    bottom: 0;
-    width: min(52vw, 180px);
+    bottom: 12px;
+    width: min(48vw, 168px);
     height: 12px;
-    transform: translate(-50%, 44px);
   }
 
   .signature-info-stack {
