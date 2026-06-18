@@ -550,7 +550,6 @@ function initSignaturePours() {
   let hasMovedSignature = false;
   let suppressOpenUntil = 0;
   let signatureScrollTrigger = null;
-  let mobileLastScrollIndex = -1;
   let activeBottleLayer = bottleImg;
   const bottleLayers = new Map();
 
@@ -676,6 +675,76 @@ function initSignaturePours() {
     setActivePour(activeIndex + direction);
   }
 
+  function setupMobileSwipeShowcase() {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchLastX = 0;
+    let isSwipeTracking = false;
+    const swipeThreshold = 44;
+    const verticalTolerance = 70;
+
+    function startSwipe(clientX, clientY) {
+      touchStartX = clientX;
+      touchLastX = clientX;
+      touchStartY = clientY;
+      isSwipeTracking = true;
+      hasMovedSignature = false;
+    }
+
+    function updateSwipe(clientX, clientY) {
+      if (!isSwipeTracking) return;
+
+      touchLastX = clientX;
+      const dx = clientX - touchStartX;
+      const dy = clientY - touchStartY;
+
+      if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy) * 1.15) {
+        hasMovedSignature = true;
+      }
+    }
+
+    function endSwipe(clientY) {
+      if (!isSwipeTracking) return;
+      isSwipeTracking = false;
+
+      const dx = touchLastX - touchStartX;
+      const dy = clientY - touchStartY;
+
+      if (Math.abs(dx) >= swipeThreshold && Math.abs(dy) <= verticalTolerance) {
+        suppressOpenUntil = performance.now() + 450;
+        movePour(dx < 0 ? 1 : -1);
+      }
+
+      window.setTimeout(() => {
+        hasMovedSignature = false;
+      }, 120);
+    }
+
+    stage.addEventListener("touchstart", (event) => {
+      if (!event.touches.length) return;
+      const touch = event.touches[0];
+      startSwipe(touch.clientX, touch.clientY);
+    }, { passive: true });
+
+    stage.addEventListener("touchmove", (event) => {
+      if (!event.touches.length) return;
+      const touch = event.touches[0];
+      updateSwipe(touch.clientX, touch.clientY);
+    }, { passive: true });
+
+    stage.addEventListener("touchend", (event) => {
+      const touch = event.changedTouches && event.changedTouches.length
+        ? event.changedTouches[0]
+        : null;
+      endSwipe(touch ? touch.clientY : touchStartY);
+    }, { passive: true });
+
+    stage.addEventListener("touchcancel", () => {
+      isSwipeTracking = false;
+      hasMovedSignature = false;
+    }, { passive: true });
+  }
+
   function preloadPourImages() {
     return Promise.all(Array.from(bottleLayers.values()).map((image) => {
       if (typeof image.decode === "function") {
@@ -708,7 +777,7 @@ function initSignaturePours() {
     dot.addEventListener("click", () => {
       setActivePour(index);
 
-      if (!prefersReducedMotion) {
+      if (!prefersReducedMotion && !isMobileShowcase) {
         const sectionTop = signatureScrollTrigger ? signatureScrollTrigger.start : section.getBoundingClientRect().top + window.pageYOffset;
         const sectionEnd = signatureScrollTrigger ? signatureScrollTrigger.end : sectionTop + Math.max(1, section.offsetHeight - window.innerHeight);
         const target = sectionTop + (sectionEnd - sectionTop) * (index / (pourKeys.length - 1));
@@ -825,36 +894,7 @@ function initSignaturePours() {
   }
 
   if (isMobileShowcase) {
-    signatureScrollTrigger = ScrollTrigger.create({
-      trigger: section,
-      start: "top top",
-      end: () => `+=${window.innerHeight * (pourKeys.length + 0.35)}`,
-      pin: stage,
-      pinSpacing: true,
-      anticipatePin: 1,
-      scrub: false,
-      invalidateOnRefresh: true,
-      snap: {
-        snapTo: 1 / (pourKeys.length - 1),
-        duration: { min: 0.22, max: 0.42 },
-        delay: 0.035,
-        ease: "power2.out"
-      },
-      onEnter: () => {
-        mobileLastScrollIndex = -1;
-        setActivePour(0, true, false);
-      },
-      onLeaveBack: () => {
-        mobileLastScrollIndex = -1;
-        setActivePour(0, true, false);
-      },
-      onUpdate: (self) => {
-        const index = Math.round(self.progress * (pourKeys.length - 1));
-        if (index === mobileLastScrollIndex) return;
-        mobileLastScrollIndex = index;
-        setActivePour(index);
-      }
-    });
+    setupMobileSwipeShowcase();
     return;
   }
 
