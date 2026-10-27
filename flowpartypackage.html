@@ -998,5 +998,18 @@ function init(){
 }
 init();
 </script>
+
+<!-- Party Leads tracking: logs views, clicks, package picks and enquiries to the central dashboard -->
+<script>
+window.CPLS_CONTEXT=function(){
+  var c=calc();
+  return { package: c.t.name+(c.add?' + '+c.add.label:''), guests: c.g, date: S.date||'', estimate: c.total, details: waMessage(c) };
+};
+document.addEventListener('click',function(e){
+  var el=e.target.closest&&e.target.closest('#pkGrid .pk,#tierSeg button');
+  if(el&&window.CPLS){ var t=tierOf(el.dataset.id); if(t) CPLS.select(t.name); }
+},true);
+</script>
+<script src="https://cpls-e5fdf.web.app/t.js" data-brand="flow" data-outlet="saket" data-accent="#e2bf6f" defer></script>
 </body>
 </html>
