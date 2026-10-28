@@ -449,14 +449,14 @@ header.hero,section,footer{position:relative}
     <div class="reveal">
       <div class="eyebrow">Step 2 of 3</div>
       <h2 class="title">Pick your food</h2>
-      <p class="lead">Your package menu has a veg list and a non-veg list. Pick from both: <b>4 + 4 appetizers</b>, <b>1 + 1 pizza</b> and <b>2 + 2 mains</b>, plus dessert. Your picks travel with the WhatsApp enquiry.</p>
-      <div class="rule"><span><i class="dv"></i>Veg</span><b>+</b><span><i class="dn"></i>Non-veg</span><em>= 14 dishes</em></div>
+      <p class="lead">Mix veg and non-veg as you like: <b>any 8 appetizers</b>, <b>any 2 pizzas</b> and <b>any 4 mains</b>, plus dessert. Your picks travel with the WhatsApp enquiry.</p>
+      <div class="rule"><span><i class="dv"></i>Veg</span><b>or</b><span><i class="dn"></i>Non-veg</span><em>= 14 dishes</em></div>
       <div class="prog" id="prog"><div class="pbar"><i id="pfill"></i></div><span id="ptxt">0 of 14 picked</span></div>
     </div>
     <div id="menuBody"></div>
     <div class="mcat">
       <div class="mcat-h"><h3>Desserts</h3><span class="cnt">Included</span></div>
-      <div class="desserts"><span>Irish Coffee Cheese Cake</span><span>Walnut Brownie with Ice Cream</span></div>
+      <div class="desserts"><span>Irish Coffee Cheesecake</span><span>Walnut Brownie</span></div>
     </div>
     <div class="menu-tools">
       <button class="btn dark ripple" id="surprise">Surprise me</button>
@@ -594,17 +594,17 @@ const TIERS = [
 
 const FOOD = {
   veg:{
-    app:[['Rose Harissa Paneer Tikka'],['Classic Paneer Tikka'],['Podi Idli Fries'],['Bruschettas','Balsamic tomato • Sautéed mushrooms'],['French Fry Board'],['Three Beans Hummus Trio'],['Pull Me Up Nachos'],['Cottage Cheese Sixty Five'],['Veg Spring Rolls (Asian)'],['Tandoori Mushroom']],
-    piz:[['Margherita','Tomato sauce • Mozzarella • Basil • Olive oil'],['Picante','Roast peppers • Jalapeños • Sundried tomato • Feta • Arugula'],['Al-Funghi','Grilled wild mushrooms • Caramelized onion • Herb cream cheese • Truffle oil']],
-    main:[['Aglio e Olio Peperoncino','Linguini • Chilli flakes • Cherry tomato • Sweet basil'],['Penne Pasta','Pesto • Alfredo • Arrabiata • Rose'],['Thai Green Curry','With jasmine rice'],['Cottage Cheese Thai Chilli Basil','With jasmine rice'],['Smoked Paneer Tikka Masala','With choice of Indian breads & rice'],['Dal Makhani']]
+    app:[['Rose Harissa Paneer Tikka'],['Baby Potatoes tossed in Korean Chilli'],['Crispy Vegetables with Smoked Chilli'],['Pull Me Up Nachos'],['Cottage Cheese Sixty Five'],['Asian-Style Veg Spring Rolls'],['Hummus Pita'],['Podi Idli Fries']],
+    piz:[['Margherita','Tomato sauce • Mozzarella • Basil • Olive oil'],['Italian Farm']],
+    main:[['Penne Pasta','Pesto • Alfredo • Arrabiata • Rose'],['Thai Green Curry','With jasmine rice'],['Smoked Paneer Tikka Masala','With choice of Indian breads & rice'],['Aglio e Olio Peperoncino','Linguini • Chilli flakes • Cherry tomato • Sweet basil'],['Dal Makhani']]
   },
   nonveg:{
-    app:[['Classic Chicken Tikka'],['Afghani Chicken Tikka'],['Korean Fried Chicken'],['Butter Chicken Spring Rolls'],['Chicken Sixty Five'],['Thai Chilli Basil Fish'],['Jerk Chicken','With mango habanero sauce'],['Skillet Bulgogi Nachos'],['Fish Fingers']],
-    piz:[['Sicily','Spiced flame-grilled chicken • Roasted peppers • Jalapeño • Corn'],['Pesto Chicken','Smoked chicken • Basil pesto • Rocket leaves • Truffle oil drizzle'],['Butter Chicken Pizza','Classic butter chicken with an Italian twist']],
-    main:[['Linguini AOP with Grilled Chicken Breast','Linguini • Cherry tomatoes • Basil • Chili flakes'],['Creamy Chicken Penne','Alfredo • Parmesan'],['Chicken in Hot Garlic Sauce','With jasmine rice'],['Smoked Chicken Tikka Masala','With choice of Indian breads & rice'],['White Butter Chicken'],['Butter Chicken','With choice of Indian breads']]
+    app:[['Classic Chicken Tikka'],['Bang Bang Chicken'],['Holy Basil Thai Chilli Chicken'],['Korean Fried Chicken'],['Fish Fingers'],['Thai Chilli Basil Fish'],['Chicken Sixty Five'],['Chongqing Chicken']],
+    piz:[['Smoked Chicken Pesto','Smoked chicken • Basil pesto • Rocket leaves • Truffle oil drizzle'],['Spicy Pluck','Jerk chicken • Onion • Buffalo mozzarella']],
+    main:[['Creamy Chicken Penne','Alfredo • Parmesan'],['Chicken in Hot Garlic Sauce','With jasmine rice'],['Smoked Chicken Tikka Masala','With choice of Indian breads & rice'],['Aglio e Olio Peperoncino Chicken','Linguini • Cherry tomatoes • Basil • Chilli flakes'],['Butter Chicken','With choice of Indian breads']]
   }
 };
-const CATS = [{k:'app',t:'Appetizers',lim:4,w:'Any 4'},{k:'piz',t:'Pizzas',lim:1,w:'Any 1'},{k:'main',t:'Mains',lim:2,w:'Any 2'}];
+const CATS = [{k:'app',t:'Appetizers',lim:8,w:'Any 8'},{k:'piz',t:'Pizzas',lim:2,w:'Any 2'},{k:'main',t:'Mains',lim:4,w:'Any 4'}];
 
 const TERMS = [
  ['Minimum guests','Packages are not served below 25 people.'],
@@ -730,9 +730,8 @@ function shade(hex){ // darker, saturated octopus tint from tier accent
 function picksText(){
   const out=[];
   CATS.forEach(cat=>{
-    const v=S.picks.veg[cat.k], n=S.picks.nonveg[cat.k]; if(!v.length&&!n.length) return;
-    const parts=[]; if(v.length) parts.push(`Veg – ${v.join(', ')}`); if(n.length) parts.push(`Non-veg – ${n.join(', ')}`);
-    out.push(`${cat.t}: ${parts.join(' | ')}`);
+    const all=[...S.picks.veg[cat.k],...S.picks.nonveg[cat.k]]; if(!all.length) return;
+    out.push(`${cat.t}: ${all.join(', ')}`);
   });
   return out;
 }
@@ -765,7 +764,7 @@ function renderBar(){
   const rows=order.filter(k=>t.rows[k]);
   if(rows.length) g+=`<div class="rows">${rows.map(k=>`<div><b>${k}</b><span>${t.rows[k]}</span></div>`).join('')}</div>`;
   if(t.addons) g+=grp('Optional add-ons',`<div class="chips big">${t.addons.map(a=>`<span>${a.label} · +${inr(a.price)} per person</span>`).join('')}</div>`);
-  g+=grp('Food',`<p class="none" style="color:var(--foam)">${t.kind==='food'?'Food only. ':''}4 veg + 4 non-veg appetizers, 1 + 1 pizza, 2 + 2 mains and dessert. Pick yours in step 2.</p>`);
+  g+=grp('Food',`<p class="none" style="color:var(--foam)">${t.kind==='food'?'Food only. ':''}Any 8 appetizers, any 2 pizzas, any 4 mains and dessert. Pick yours in step 2.</p>`);
   p.style.setProperty('--c',t.c);
   p.innerHTML=`<div class="bp-h"><div><small>You selected</small><h3>${t.name}</h3></div><div class="bp-p">${inr(t.price)}<small>per person + taxes</small></div></div>${g}<p class="none" style="margin-top:14px">Not included: Gingerale, Red Bull, sparkling water.</p>`;
 }
@@ -786,13 +785,13 @@ function buildMenu(){
   const body=$('menuBody'); body.innerHTML='';
   CATS.forEach(cat=>{
     const wrap=document.createElement('div'); wrap.className='mcat';
-    const pills=DIETS.map(D=>{ const n=S.picks[D.d][cat.k].length; return `<span class="pill ${n===cat.lim?'full':''}" data-k="${cat.k}" data-d="${D.d}"><i class="d${D.d==='veg'?'v':'n'}"></i>${D.label} ${n}/${cat.lim}</span>`; }).join('');
+    const n=catCount(cat.k); const pills=`<span class="pill ${n===cat.lim?'full':''}" data-k="${cat.k}">Pick any ${cat.lim} · ${n}/${cat.lim}</span>`;
     wrap.innerHTML=`<div class="mcat-h"><h3>${cat.t}</h3><div class="cnts">${pills}</div></div><div class="split"></div>`;
     const split=wrap.querySelector('.split');
     DIETS.forEach(D=>{
       const sel=S.picks[D.d][cat.k];
       const col=document.createElement('div'); col.className='col '+D.cls;
-      col.innerHTML=`<div class="ch"><i></i>${D.label} · pick ${cat.lim}</div><div class="items"></div>`;
+      col.innerHTML=`<div class="ch"><i></i>${D.label}</div><div class="items"></div>`;
       const box=col.querySelector('.items');
       FOOD[D.d][cat.k].forEach(([name,desc])=>{
         const b=document.createElement('button'); b.className='item ripple'; b.style.setProperty('--dc',D.c);
@@ -807,13 +806,13 @@ function buildMenu(){
   });
   renderPickSum();
 }
+function catCount(k){ return S.picks.veg[k].length+S.picks.nonveg[k].length; }
 function togglePick(d,cat,name){
   const arr=S.picks[d][cat.k], i=arr.indexOf(name), y=scrollY;
   if(i>-1){ arr.splice(i,1); Snd.pick(false); }
-  else if(arr.length>=cat.lim){
-    if(cat.lim===1){ arr.length=0; arr.push(name); Snd.pick(true); }
-    else { const c=document.querySelector(`.pill[data-k="${cat.k}"][data-d="${d}"]`); if(c){ c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); }
-      toast(`${d==='veg'?'Veg':'Non-veg'} ${cat.t.toLowerCase()} are full (${cat.lim}). Tap one to swap it out.`); return; }
+  else if(catCount(cat.k)>=cat.lim){
+    const c=document.querySelector(`.pill[data-k="${cat.k}"]`); if(c){ c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); }
+    toast(`${cat.t} are full (${cat.lim}). Tap one to swap it out.`); return;
   } else { arr.push(name); Snd.pick(true); }
   buildMenu(); render(); scrollTo(0,y);
 }
@@ -825,7 +824,10 @@ function renderPickSum(){
   if(el) el.textContent=n>=TOTAL_DISHES?'Your table is set':(n?`${TOTAL_DISHES-n} to go`:'Nothing picked yet');
 }
 function surprise(){
-  DIETS.forEach(D=>CATS.forEach(cat=>{ const pool=FOOD[D.d][cat.k].map(x=>x[0]).sort(()=>Math.random()-.5); S.picks[D.d][cat.k]=pool.slice(0,cat.lim); }));
+  CATS.forEach(cat=>{
+    const pool=DIETS.flatMap(D=>FOOD[D.d][cat.k].map(x=>[D.d,x[0]])).sort(()=>Math.random()-.5).slice(0,cat.lim);
+    DIETS.forEach(D=>{ S.picks[D.d][cat.k]=FOOD[D.d][cat.k].map(x=>x[0]).filter(nm=>pool.some(([d,p])=>d===D.d&&p===nm)); });
+  });
   buildMenu(); render(); Snd.swell(S.tier); toast('A full table of 14, picked for you');
 }
 
